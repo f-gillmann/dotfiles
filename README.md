@@ -13,4 +13,4 @@
 | Editor            | neovim            |
 | Browser           | librewolf         |
 | Bootloader        | grub              |
-
+| Widgets           | ags               |

@@ -5,12 +5,6 @@
 #---\ | https://github.com/f-gillmann/dotfiles |  \--#
 #----\|  --  *      ---   **   ---      *  --  |   \-#
 
-get_highlight_color() {
-  # Get a random color for our highlights that is not black (30) or bigger than white (37)
-  HIGHLIGHT_COLOR=$((31 + $RANDOM % 6))
-  echo $HIGHLIGHT_COLOR
-}
-
 print_ascii_art() {
   # ██████╗  ██████╗ ████████╗███████╗
   # ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝
@@ -36,4 +30,18 @@ print_ascii_art() {
   printf "    █████████████████████████████████${2}╗${RESET}${NEWLINE}"
   printf "    ${2}╚════════════════════════════════╝${NEWLINE}"
   printf "        ${RESET}made by${RESET} ${2}Florian Gillmann${RESET}${NEWLINE}${NEWLINE}"
+}
+
+install_yay() {
+    PREVIOUS_DIR=$(pwd)
+    TEMP_DIR=$(mktemp -d)
+
+    git clone -c init.defaultBranch=master --quiet https://aur.archlinux.org/yay-bin.git $TEMP_DIR
+    cd $TEMP_DIR &&
+    makepkg -o &&
+    makepkg -se &&
+    makepkg -i --noconfirm
+
+    cd $PREVIOUS_DIR
+    rm -rf $TEMP_DIR
 }
