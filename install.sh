@@ -13,10 +13,12 @@ source ./scripts/functions.sh
 source ./scripts/install_packages.sh
 
 #-----------#
-# Variables #
+# Variables #d
 #-----------#
 
+# Get a random color for our highlights that is not black (30) or bigger than white (37)
 HIGHLIGHT_COLOR=$((31 + $RANDOM % 6))
+
 COLOR="\e[${HIGHLIGHT_COLOR}m"
 LIGHT_COLOR="\e[$((${HIGHLIGHT_COLOR} + 60))m"
 RESET_COLOR="\e[0m"
@@ -35,11 +37,13 @@ print_ascii_art $COLOR $LIGHT_COLOR
 # System check #
 #--------------#
 
+# Check if we're on an arch system
 if ! grep -qE '(ID=arch|ID_LIKE=arch)' /etc/*-release; then
   printf "$PREFIX You are not running an Arch or Arch-based Linux distribution.\n"
   exit 1
 fi
 
+# Check if we're on an arch-based system
 if ! grep -qE '(ID_LIKE=arch)' /etc/*-release; then
   printf "$PREFIX Running on an Arch-based distribution is not officially supported\n$PREFIX"
   read -r -p " Do you wish to proceed with installation? [y/N] " response

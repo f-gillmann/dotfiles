@@ -19,7 +19,6 @@ install_base() {
   fi
 }
 
-# Function to install packages from a list using yay
 install_aur() {
   if [[ -f "$1" ]]; then
     printf "$PREFIX Installing AUR packages from $1...\n"
