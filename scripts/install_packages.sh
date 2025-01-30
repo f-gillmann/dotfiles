@@ -7,28 +7,32 @@
 
 install_base() {
   if [[ -f "$1" ]]; then
-    printf "$PREFIX Installing base packages from $1...\n"
-    sudo pacman -Sq --needed --noconfirm - < "$1" || {
-      printf "$PREFIX Error: Failed to install base packages.\n"
+    printf "$PREFIX Installing base packages from $1...$NEWLINE"
+    
+    sudo pacman -Sq --needed --noconfirm - < "$1" 2>&1 | sed 's/warning:/ ->/g;' || {
+      printf "$PREFIX Error: Failed to install base packages.$NEWLINE"
       exit 1
     }
-    printf "$PREFIX Base packages installed successfully.\n"
+    
+    printf "$PREFIX Base packages installed successfully.$NEWLINE"
   else
-    printf "$PREFIX Error: Base package list '$1' not found.\n"
+    printf "$PREFIX Error: Base package list '$1' not found.$NEWLINE"
     exit 1
   fi
 }
 
 install_aur() {
   if [[ -f "$1" ]]; then
-    printf "$PREFIX Installing AUR packages from $1...\n"
+    printf "$PREFIX Installing AUR packages from $1...$NEWLINE"
+    
     yay -Sq --needed --noconfirm - < "$1" || {
-      printf "$PREFIX Error: Failed to install AUR packages.\n"
+      printf "$PREFIX Error: Failed to install AUR packages.$NEWLINE"
       exit 1
     }
-    printf "$PREFIX AUR packages installed successfully.\n"
+    
+    printf "$PREFIX AUR packages installed successfully.$NEWLINE"
   else
-    printf "$PREFIX Error: AUR package list '$1' not found.\n"
+    printf "$PREFIX Error: AUR package list '$1' not found.$NEWLINE"
     exit 1
   fi
 }
