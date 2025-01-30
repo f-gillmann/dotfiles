@@ -12,6 +12,24 @@ UNDERLINE="\e[4m"
 NEWLINE="\n"
 PREFIX="${COLOR}\$${RESET_COLOR}/${LIGHT_COLOR}>${RESET_COLOR}"
 
+# Check if dependencies are missing
+for dep in "${DEPENDENCIES[@]}"; do
+  if ! pacman -Qq "$dep" &> /dev/null; then
+    MISSING_DEPENDENCIES+=("$dep")
+  fi
+done
+
+if [[ ${#MISSING_DEPENDENCIES} -gt 0 ]]; then
+  printf "$PREFIX The following dependencies are missing:$NEWLINE"
+
+  for dep in "${MISSING_DEPENDENCIES[@]}"; do
+    echo "- $dep"
+  done
+
+  printf "$PREFIX Exiting...$NEWLINE"
+  exit 1
+fi
+
 printf "$PREFIX Downloading files from ${LIGHT_COLOR}${UNDERLINE}https://github.com/f-gillmann/dotfiles${RESET_COLOR}.$NEWLINE"
 
 # Check if the f-gillmann-dots directory exists
