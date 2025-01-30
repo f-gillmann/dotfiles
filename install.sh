@@ -46,7 +46,7 @@ fi
 
 # Check if we're on an arch-based system
 if ! grep -qsE '(ID_LIKE=arch)' /etc/*-release; then
-  printf "$PREFIX Running on an Arch-based distribution is not officially supported${$NEWLINE}${PREFIX}"
+  printf "$PREFIX Running on an Arch-based distribution is not officially supported${NEWLINE}${PREFIX}"
   read -r -p " Do you wish to proceed with installation? [y/N] " response
 
   if [[ "$response" =~ ^[nN]$ ]]; then
