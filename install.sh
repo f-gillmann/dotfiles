@@ -127,7 +127,7 @@ printf "$PREFIX Finished installing all packages.$NEWLINE"
 #------------------------#
 
 USER_DIRS=(
-  "dots/home/archuser/.config/hypr"
+  "/home/archuser/.config/hypr"
 )
 
 for usr_dir in "${USER_DIRS[@]}"; do
