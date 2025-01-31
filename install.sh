@@ -11,6 +11,7 @@
 
 source ./scripts/functions.sh
 source ./scripts/install_packages.sh
+source ./scripts/install_dependencies.sh
 
 #-----------#
 # Variables #
