@@ -14,7 +14,7 @@ backup_directory() {
   local BACKUP_PATH="${BACKUP_DIR/USR_DIR_PATH}"
 
   mkdir -p "$(dirname "$BACKUP_PATH")"
-  sudo cp -r "$USR_DIR_PATH" "$BACKUP_PATH"
+  cp -r "$USR_DIR_PATH" "$BACKUP_PATH"
 
   if [[ $? -eq 0 ]]; then
     printf "$PREFIX Backed up: $USR_DIR_PATH to ${BACKUP_PATH}.$NEWLINE"
