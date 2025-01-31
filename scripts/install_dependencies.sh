@@ -22,7 +22,7 @@ install_missing_depedencies() {
   local MISSING_DEPENDENCIES=("$@")
   local RESPONSE="${MISSING_DEPENDENCIES[-1]}"
 
-  unset dependencies[-1]
+  unset MISSING_DEPENDENCIES[-1]
 
   if [[ "$RESPONSE" =~ ^[yY]$ ]]; then
     sudo pacman -Sy
