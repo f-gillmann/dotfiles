@@ -10,7 +10,7 @@ backup_directory() {
   local BACKUP_DIR="$2"
   local CURRENT_USER="$3"
 
-  local NEW_DIR_PATH="${$USR_DIR/archuser/$current_user}"
+  local NEW_DIR_PATH="${USR_DIR/archuser/$CURRENT_USER}"
   local BACKUP_PATH="${BACKUP_DIR}$NEW_DIR_PATH"
 
   mkdir -p "$(dirname "$BACKUP_PATH")"
