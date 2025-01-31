@@ -126,6 +126,9 @@ printf "$PREFIX Finished installing all packages.$NEWLINE"
 # Backup Existing Config #
 #------------------------#
 
+# TODO: Write a better way of backup up files, maybe with a list of files in a seperate file
+# Similar to this: https://github.com/HyDE-Project/HyDE/blob/master/Scripts/restore_cfg.psv
+
 USER_DIRS=(
   "/home/archuser/.config/hypr"
 )
