@@ -12,6 +12,7 @@
 source ./scripts/functions.sh
 source ./scripts/install_packages.sh
 source ./scripts/install_dependencies.sh
+source ./scripts/backup.sh
 
 #-----------#
 # Variables #
@@ -28,6 +29,13 @@ PREFIX="${COLOR}\$${RESET_COLOR}/${LIGHT_COLOR}>${RESET_COLOR}"
 
 BASE_PACKAGES="packages/base.list"
 AUR_PACKAGES="packages/aur.list"
+
+CURRENT_USER=$(whoami)
+DATE_TIME=$(date +"%Y%m%d_%H%M%S")
+BACKUP_NAME="backup_dotfiles_f-gillmann_${DATE_TIME}"
+BACKUP_DIR="./$BACKUP_NAME"
+BACKUP_ARCHIVE="$BACKUP_NAME\.tar.gz"
+mkdir -p "$BACKUP_DIR"
 
 #-----------------#
 # Print Ascii Art #
@@ -77,9 +85,8 @@ if [[ ${#MISSING_DEPENDENCIES} -gt 0 ]]; then
   if [[ "$response" =~ ^[yY]$ ]]; then
     install_missing_depedencies "${MISSING_DEPENDENCIES[@]}" "$response"
 
-    if [[ $? -eq 0 ]]; then # Check the return code from file2.sh
+    if [[ $? -eq 0 ]]; then
         printf "$PREFIX Dependencies installed.$NEWLINE"
-        exit 0
     else
         echo "$PREFIX Dependency installation failed.$NEWLINE"
         exit 1
@@ -119,3 +126,24 @@ printf "$PREFIX Finished installing all packages.$NEWLINE"
 # Backup Existing Config #
 #------------------------#
 
+DOTS_DIRS=(
+  "dots/home/archuser/.config/hypr"
+)
+
+{
+  for dot_dir in "${DOTS_DIRS[@]}"; do
+    backup_directory "$dot_dir" "$BACKUP_DIR" "$CURRENT_USER"
+  done
+} > $BACKUP_DIR\/backup_log.txt
+
+printf "$PREFIX Backup process complete. Temporary backup directory: $BACKUP_DIR\.$NEWLINE"
+
+tar -czvf "$BACKUP_ARCHIVE" "$BACKUP_DIR"
+
+if [[ $? -eq 0 ]]; then
+  echo "Created archive: $BACKUP_ARCHIVE"
+  rm -rf "$BACKUP_DIR"
+  echo "Removed temporary directory: $BACKUP_DIR"
+else
+  echo "Error creating archive: $BACKUP_ARCHIVE"
+fi
