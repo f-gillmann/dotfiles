@@ -60,14 +60,7 @@ fi
 #--------------------#
 
 DEPENDENCIES=("git" "base-devel")
-MISSING_DEPENDENCIES=()
-
-# Check if dependencies are missing
-for dep in "${DEPENDENCIES[@]}"; do
-  if ! pacman -Qq "$dep" &> /dev/null; then
-    MISSING_DEPENDENCIES+=("$dep")
-  fi
-done
+MISSING_DEPENDENCIES=($(check_missing_dependencies))
 
 # Install missing dependencies
 if [[ ${#MISSING_DEPENDENCIES} -gt 0 ]]; then
@@ -81,10 +74,17 @@ if [[ ${#MISSING_DEPENDENCIES} -gt 0 ]]; then
   read -r -p " Do you want to install them? [y/N] " response
 
   if [[ "$response" =~ ^[yY]$ ]]; then
-    sudo pacman -Sy
-    sudo pacman -S --needed --noconfirm "${MISSING_DEPENDENCIES[@]}"
+    install_missing_depedencies "${MISSING_DEPENDENCIES[@]}" "$response"
+
+    if [[ $? -eq 0 ]]; then # Check the return code from file2.sh
+        printf "$PREFIX Dependencies installed.$NEWLINE"
+        exit 0
+    else
+        echo "$PREFIX Dependency installation failed.$NEWLINE"
+        exit 1
+    fi
   else
-    printf "$PREFIX Exiting because required dependencies are not installed.$NEWLINE"
+    printf "$PREFIX Exiting because required dependencies are not installed...$NEWLINE"
     exit 1
   fi
 else
@@ -113,3 +113,8 @@ install_base "$BASE_PACKAGES" &&
 install_aur "$AUR_PACKAGES" &&
 
 printf "$PREFIX Finished installing all packages.$NEWLINE"
+
+#------------------------#
+# Backup Existing Config #
+#------------------------#
+
