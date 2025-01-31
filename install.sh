@@ -134,7 +134,7 @@ for usr_dir in "${USER_DIRS[@]}"; do
   backup_directory "$usr_dir" "$BACKUP_DIR" "$CURRENT_USER"
 done
 
-printf "$PREFIX Backup process complete. Temporary backup directory: $BACKUP_DIR\.$NEWLINE"
+printf "$PREFIX Backup process complete. Temporary backup directory: ${BACKUP_DIR}.$NEWLINE"
 
 tar -czvf "$BACKUP_ARCHIVE" "$BACKUP_DIR"
 

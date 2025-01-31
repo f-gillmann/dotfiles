@@ -17,10 +17,10 @@ backup_directory() {
   cp -r "$NEW_DIR_PATH" "$BACKUP_PATH"
 
   if [[ $? -eq 0 ]]; then
-    printf "$PREFIX Backed up: $NEW_DIR_PATH to $BACKUP_PATH\.$NEWLINE"
+    printf "$PREFIX Backed up: $NEW_DIR_PATH to ${BACKUP_PATH}.$NEWLINE"
     return 0
   else
-    printf "$PREFIX Error backing up: $NEW_DIR_PATH\.$NEWLINE"
+    printf "$PREFIX Error backing up: ${NEW_DIR_PATH}.$NEWLINE"
     return 1
   fi
 }
