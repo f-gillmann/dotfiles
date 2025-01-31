@@ -20,7 +20,7 @@ check_missing_dependencies() {
 
 install_missing_depedencies() {
   local MISSING_DEPENDENCIES=("$@")
-  local RESPONSE="${dependencies[-1]}"
+  local RESPONSE="${MISSING_DEPENDENCIES[-1]}"
 
   unset dependencies[-1]
 
