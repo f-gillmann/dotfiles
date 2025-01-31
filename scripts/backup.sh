@@ -6,11 +6,11 @@
 #----\|  --  *      ---   **   ---      *  --  |   \-#
 
 backup_directory() {
-  local DOT_DIR="$1"
+  local USR_DIR="$1"
   local BACKUP_DIR="$2"
   local CURRENT_USER="$3"
 
-  local NEW_DIR_PATH="${dot_dir/archuser/$current_user}"
+  local NEW_DIR_PATH="${$USR_DIR/archuser/$current_user}"
   local BACKUP_PATH="${BACKUP_DIR}$NEW_DIR_PATH"
 
   mkdir -p "$(dirname "$BACKUP_PATH")"

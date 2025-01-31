@@ -34,7 +34,7 @@ CURRENT_USER=$(whoami)
 DATE_TIME=$(date +"%Y%m%d_%H%M%S")
 BACKUP_NAME="backup_dotfiles_f-gillmann_${DATE_TIME}"
 BACKUP_DIR="./$BACKUP_NAME"
-BACKUP_ARCHIVE="$BACKUP_NAME\.tar.gz"
+BACKUP_ARCHIVE="$BACKUP_NAME.tar.gz"
 mkdir -p "$BACKUP_DIR"
 
 #-----------------#
@@ -126,15 +126,13 @@ printf "$PREFIX Finished installing all packages.$NEWLINE"
 # Backup Existing Config #
 #------------------------#
 
-DOTS_DIRS=(
+USER_DIRS=(
   "dots/home/archuser/.config/hypr"
 )
 
-{
-  for dot_dir in "${DOTS_DIRS[@]}"; do
-    backup_directory "$dot_dir" "$BACKUP_DIR" "$CURRENT_USER"
-  done
-} > $BACKUP_DIR\/backup_log.txt
+for usr_dir in "${USER_DIRS[@]}"; do
+  backup_directory "$usr_dir" "$BACKUP_DIR" "$CURRENT_USER"
+done
 
 printf "$PREFIX Backup process complete. Temporary backup directory: $BACKUP_DIR\.$NEWLINE"
 
