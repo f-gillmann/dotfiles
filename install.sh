@@ -67,8 +67,8 @@ fi
 # Check if we're running grub and configure it if so
 if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
   # Backup grub files
-  mkdir -p ${BACKUP_DIR}/etc/default/grub
-  mkdir -p ${BACKUP_DIR}/boot/grub/grub.cfg
+  mkdir -p ${BACKUP_DIR}/etc/default
+  mkdir -p ${BACKUP_DIR}/boot/grub
   sudo cp /etc/default/grub ${BACKUP_DIR}/etc/default/grub
   sudo cp /boot/grub/grub.cfg ${BACKUP_DIR}/boot/grub/grub.cfg
 
@@ -100,9 +100,7 @@ if detect_nvidia && ! is_pkg_installed nvidia-dkms; then
   read -r -p " Do you want to nvidia-dkms drivers? [y/N] " response
 
   if [[ "$response" =~ ^[yY]$ ]]; then
-    INSTALL_NVIDIA_DKMS=1
-  else
-    INSTALL_NVIDIA_DKMS=0
+    printf "nvidia-dkms$NEWLINE" >> packages/base.list
   fi
 fi
 
@@ -112,10 +110,6 @@ fi
 
 DEPENDENCIES=("git" "base-devel")
 MISSING_DEPENDENCIES=($(check_missing_dependencies))
-
-if detect_nvidia && [[ $INSTALL_NVIDIA_DKMS -eq 1 ]]; then
-  DEPENDENCIES+=("nvidia-dkms")
-fi
 
 # Install missing dependencies
 if [[ ${#MISSING_DEPENDENCIES} -gt 0 ]]; then
