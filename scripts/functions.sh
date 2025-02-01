@@ -33,15 +33,37 @@ print_ascii_art() {
 }
 
 install_yay() {
-    PREVIOUS_DIR=$(pwd)
-    TEMP_DIR=$(mktemp -d)
+  PREVIOUS_DIR=$(pwd)
+  TEMP_DIR=$(mktemp -d)
 
-    git clone -c init.defaultBranch=master --quiet https://aur.archlinux.org/yay-bin.git $TEMP_DIR
-    cd $TEMP_DIR &&
-    makepkg -o &&
-    makepkg -se &&
-    makepkg -i --noconfirm
+  git clone -c init.defaultBranch=master --quiet https://aur.archlinux.org/yay-bin.git $TEMP_DIR
+  cd $TEMP_DIR &&
+  makepkg -o &&
+  makepkg -se &&
+  makepkg -i --noconfirm
 
-    cd $PREVIOUS_DIR
-    rm -rf $TEMP_DIR
+  cd $PREVIOUS_DIR
+  rm -rf $TEMP_DIR
+}
+
+is_pkg_installed() {
+  local PKG=$1
+
+  if pacman -Qi "${PkgIn}" &>/dev/null; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Thanks to
+# https://github.com/HyDE-Project/HyDE/blob/a1ed62411cd86426002bb3b0b968ebc0cac9da18/Scripts/global_fn.sh#L69-L88
+detect_nvidia() {
+  readarray -t GPU < <(lspci -k | grep -E "VGA|3D" | awk -F ': ' '{print $NF}')
+
+  if grep -iq nvidia <<<"${dGPU[@]}"; then
+    return 0
+  else
+    return 1
+  fi
 }

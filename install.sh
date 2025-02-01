@@ -64,12 +64,58 @@ if grep -qsE '(ID_LIKE=arch)' /etc/*-release; then
   fi
 fi
 
+# Check if we're running grub and configure it if so
+if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
+  # Backup grub files
+  mkdir -p ${BACKUP_DIR}/etc/default/grub
+  mkdir -p ${BACKUP_DIR}/boot/grub/grub.cfg
+  sudo cp /etc/default/grub ${BACKUP_DIR}/etc/default/grub
+  sudo cp /boot/grub/grub.cfg ${BACKUP_DIR}/boot/grub/grub.cfg
+
+  # Thanks to
+  # https://github.com/HyDE-Project/HyDE/blob/a1ed62411cd86426002bb3b0b968ebc0cac9da18/Scripts/install_pre.sh#L27-L28
+  if detect_nvidia; then
+    printf "$PREFIX Adding nvidia_drm.modeset=1 to /etc/default/grub...$NEWLINE"
+
+    GCLD=$(grep "^GRUB_CMDLINE_LINUX_DEFAULT=" "/etc/default/grub" | cut -d'"' -f2 | sed 's/\b nvidia_drm.modeset=.\b//g')
+    sudo sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"${GCLD} nvidia_drm.modeset=1\"" /etc/default/grub
+  fi
+
+  # TODO: Add grub themes
+  sudo sed -i "/^GRUB_DEFAULT=/c\GRUB_DEFAULT=saved
+               /^GRUB_GFXMODE=/c\GRUB_GFXMODE=1280x1024x32,auto
+               /^#GRUB_SAVEDEFAULT=true/c\GRUB_SAVEDEFAULT=true" /etc/default/grub
+
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+else
+  printf "$PREFIX It looks like you're not using grub on your system.$NEWLINE"
+  printf "$PREFIX Exiting...$NEWLINE"
+  exit 1
+fi
+
+# Check if an Nvidia GPU is installed, then prompt to install drivers
+if detect_nvidia && ! is_pkg_installed nvidia-dkms; then
+  printf "$PREFIX Nvidia Card detected.$NEWLINE"
+  printf "$PREFIX"
+  read -r -p " Do you want to nvidia-dkms drivers? [y/N] " response
+
+  if [[ "$response" =~ ^[yY]$ ]]; then
+    INSTALL_NVIDIA_DKMS=1
+  else
+    INSTALL_NVIDIA_DKMS=0
+  fi
+fi
+
 #--------------------#
 # Check Dependencies #
 #--------------------#
 
 DEPENDENCIES=("git" "base-devel")
 MISSING_DEPENDENCIES=($(check_missing_dependencies))
+
+if detect_nvidia && [[ $INSTALL_NVIDIA_DKMS -eq 1 ]]; then
+  DEPENDENCIES+=("nvidia-dkms")
+fi
 
 # Install missing dependencies
 if [[ ${#MISSING_DEPENDENCIES} -gt 0 ]]; then
