@@ -49,7 +49,7 @@ install_yay() {
 is_pkg_installed() {
   local PKG=$1
 
-  if pacman -Qi "${PkgIn}" &>/dev/null; then
+  if pacman -Qi "${PKG}" &>/dev/null; then
     return 0
   else
     return 1
