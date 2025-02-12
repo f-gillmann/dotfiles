@@ -13,6 +13,8 @@ source ./scripts/functions.sh
 source ./scripts/install_packages.sh
 source ./scripts/install_dependencies.sh
 source ./scripts/backup.sh
+source ./scripts/lst.sh
+source ./scripts/lst_functions.sh
 
 #-----------#
 # Variables #
@@ -162,29 +164,8 @@ install_aur "$AUR_PACKAGES" &&
 
 printf "$PREFIX Finished installing all packages.$NEWLINE"
 
-#------------------------#
-# Backup Existing Config #
-#------------------------#
+#----------------------------#
+# Run through all .lst files #
+#----------------------------#
 
-# TODO: Write a better way of backup up files, maybe with a list of files in a seperate file
-# Similar to this: https://github.com/HyDE-Project/HyDE/blob/master/Scripts/restore_cfg.psv
-
-USER_DIRS=(
-  "/home/archuser/.config/hypr"
-)
-
-for usr_dir in "${USER_DIRS[@]}"; do
-  backup_directory "$usr_dir" "$BACKUP_DIR" "$CURRENT_USER"
-done
-
-printf "$PREFIX Backup process complete. Temporary backup directory: ${BACKUP_DIR}.$NEWLINE"
-
-tar -czvf "$BACKUP_ARCHIVE" "$BACKUP_DIR"
-
-if [[ $? -eq 0 ]]; then
-  echo "Created archive: $BACKUP_ARCHIVE"
-  rm -rf "$BACKUP_DIR"
-  echo "Removed temporary directory: $BACKUP_DIR"
-else
-  echo "Error creating archive: $BACKUP_ARCHIVE"
-fi
+process_lst_file "lists/hyprland.lst"
