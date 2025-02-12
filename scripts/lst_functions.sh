@@ -41,12 +41,14 @@ lst_sync() {
         printf "${PREFIX} Files are identical, no synchronization needed.$NEWLINE"
         return 0
     fi
-
-    # Create target directory
-    mkdir -p "$(dirname "$target")"
     
     # Perform synchronization
-    cp -p "$src" "$target"
+    if [ -f "$src" ]; then
+        mkdir -p "$(dirname "$target")"
+        cp -p "$src" "$target"
+    elif [ -d "$src" ]; then
+        cp -rp "$src" "$target"
+    fi
 }
 
 lst_overwrite() {
@@ -61,7 +63,12 @@ lst_overwrite() {
     fi
     
     # Overwrite target with source
-    cp -p "$src" "$target"
+    if [ -f "$src" ]; then
+        mkdir -p "$(dirname "$target")"
+        cp -pf "$src" "$target"
+    elif [ -d "$src" ]; then
+        cp -rpf "$src" "$target"
+    fi
 }
 
 lst_populate() {
@@ -82,5 +89,10 @@ lst_populate() {
     fi
     
     # Copy source to target
-    cp -p "$src" "$target"
+    if [ -f "$src" ]; then
+        mkdir -p "$(dirname "$target")"
+        cp -p "$src" "$target"
+    elif [ -d "$src" ]; then
+        cp -rp "$src" "$target"
+    fi
 }
