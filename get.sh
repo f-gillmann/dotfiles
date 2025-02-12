@@ -13,6 +13,8 @@ NEWLINE="\n"
 PREFIX="${COLOR}\$${RESET_COLOR}/${LIGHT_COLOR}>${RESET_COLOR}"
 
 # Check if dependencies are missing
+DEPENDENCIES=("unzip" "curl")
+MISSING_DEPENDENCIES=()
 for dep in "${DEPENDENCIES[@]}"; do
   if ! pacman -Qq "$dep" &> /dev/null; then
     MISSING_DEPENDENCIES+=("$dep")
