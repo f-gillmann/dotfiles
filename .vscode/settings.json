@@ -1,0 +1,7 @@
+{
+    // this is just for highlighting so it doesn't look like plaintext
+    "files.associations": {
+        "*.list": "shellscript",
+        "*.pkgs": "shellscript"
+    }
+}

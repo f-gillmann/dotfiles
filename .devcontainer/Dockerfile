@@ -19,7 +19,7 @@ RUN useradd -m vscode \
 
 # Switch to user to install omz
 USER vscode
-WORKDIR /home/arvscodech
+WORKDIR /home/vscode
 
 # Install nvm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \

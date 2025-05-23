@@ -13,8 +13,8 @@ source ./scripts/functions.sh
 source ./scripts/install_packages.sh
 source ./scripts/install_dependencies.sh
 source ./scripts/backup.sh
-source ./scripts/lst.sh
-source ./scripts/lst_functions.sh
+source ./scripts/list.sh
+source ./scripts/list_functions.sh
 
 #-----------#
 # Variables #
@@ -29,8 +29,8 @@ RESET_COLOR="\e[0m"
 NEWLINE="\n"
 PREFIX="${COLOR}\$${RESET_COLOR}/${LIGHT_COLOR}>${RESET_COLOR}"
 
-BASE_PACKAGES="packages/base.list"
-AUR_PACKAGES="packages/aur.list"
+BASE_PACKAGES="packages/base.pkgs"
+AUR_PACKAGES="packages/aur.pkgs"
 
 CURRENT_USER=$(whoami)
 DATE_TIME=$(date +"%Y%m%d_%H%M%S")
@@ -51,94 +51,99 @@ print_ascii_art $COLOR $LIGHT_COLOR
 
 # Check if we're on an arch system
 if ! grep -qsE '(ID=arch|ID_LIKE=arch)' /etc/*-release; then
-  printf "$PREFIX You are not running an Arch or Arch-based Linux distribution.$NEWLINE"
-  exit 1
+    printf "$PREFIX You are not running an Arch or Arch-based Linux distribution.$NEWLINE"
+    exit 1
 fi
 
 # Check if we're on an arch-based system
 if grep -qsE '(ID_LIKE=arch)' /etc/*-release; then
-  printf "$PREFIX Running on an Arch-based distribution is not officially supported${NEWLINE}${PREFIX}"
-  read -r -p " Do you wish to proceed with installation? [y/N] " response
-
-  if [[ "$response" =~ ^[nN]$ ]]; then
-    printf "$PREFIX Exiting...$NEWLINE"
-    exit 1
-  fi
+    printf "$PREFIX Running on an Arch-based distribution is not officially supported${NEWLINE}${PREFIX}"
+    read -r -p " Do you wish to proceed with installation? [y/N] " response
+    
+    if [[ "$response" =~ ^[nN]$ ]]; then
+        printf "$PREFIX Exiting...$NEWLINE"
+        exit 1
+    fi
 fi
 
 # Check if we're running grub and configure it if so
 if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
-  # Backup grub files
-  mkdir -p ${BACKUP_DIR}/etc/default
-  mkdir -p ${BACKUP_DIR}/boot/grub
-  sudo cp /etc/default/grub ${BACKUP_DIR}/etc/default/grub
-  sudo cp /boot/grub/grub.cfg ${BACKUP_DIR}/boot/grub/grub.cfg
-
-  # Thanks to
-  # https://github.com/HyDE-Project/HyDE/blob/a1ed62411cd86426002bb3b0b968ebc0cac9da18/Scripts/install_pre.sh#L27-L28
-  if detect_nvidia; then
-    printf "$PREFIX Adding nvidia_drm.modeset=1 to /etc/default/grub...$NEWLINE"
-
-    GCLD=$(grep "^GRUB_CMDLINE_LINUX_DEFAULT=" "/etc/default/grub" | cut -d'"' -f2 | sed 's/\b nvidia_drm.modeset=.\b//g')
-    sudo sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"${GCLD} nvidia_drm.modeset=1\"" /etc/default/grub
-  fi
-
-  # TODO: Add grub themes
-  sudo sed -i "/^GRUB_DEFAULT=/c\GRUB_DEFAULT=saved
+    # Backup grub files
+    mkdir -p ${BACKUP_DIR}/etc/default
+    mkdir -p ${BACKUP_DIR}/boot/grub
+    sudo cp /etc/default/grub ${BACKUP_DIR}/etc/default/grub
+    sudo cp /boot/grub/grub.cfg ${BACKUP_DIR}/boot/grub/grub.cfg
+    
+    # Thanks to
+    # https://github.com/HyDE-Project/HyDE/blob/a1ed62411cd86426002bb3b0b968ebc0cac9da18/Scripts/install_pre.sh#L27-L28
+    if detect_nvidia; then
+        printf "$PREFIX Adding nvidia_drm.modeset=1 to /etc/default/grub...$NEWLINE"
+        
+        GCLD=$(grep "^GRUB_CMDLINE_LINUX_DEFAULT=" "/etc/default/grub" | cut -d'"' -f2 | sed 's/\b nvidia_drm.modeset=.\b//g')
+        sudo sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"${GCLD} nvidia_drm.modeset=1\"" /etc/default/grub
+    fi
+    
+    # TODO: Add grub themes
+    sudo sed -i "/^GRUB_DEFAULT=/c\GRUB_DEFAULT=saved
                /^GRUB_GFXMODE=/c\GRUB_GFXMODE=1280x1024x32,auto
-               /^#GRUB_SAVEDEFAULT=true/c\GRUB_SAVEDEFAULT=true" /etc/default/grub
-
-  sudo grub-mkconfig -o /boot/grub/grub.cfg
+    /^#GRUB_SAVEDEFAULT=true/c\GRUB_SAVEDEFAULT=true" /etc/default/grub
+    
+    sudo grub-mkconfig -o /boot/grub/grub.cfg
 else
-  printf "$PREFIX It looks like you're not using grub on your system.$NEWLINE"
-  printf "$PREFIX Exiting...$NEWLINE"
-  exit 1
+    printf "$PREFIX It looks like you're not using grub on your system.$NEWLINE"
+    read -r -p " Do you want to skip the grub configuration? [y/N] " response
+    
+    if [[ "$response" =~ ^[nN]$ ]]; then
+        printf "$PREFIX Exiting...$NEWLINE"
+        rm -rf "$BACKUP_DIR"
+        exit 1
+    fi
 fi
 
 # Check if an Nvidia GPU is installed, then prompt to install drivers
 if detect_nvidia && ! is_pkg_installed nvidia-dkms; then
-  printf "$PREFIX Nvidia Card detected.$NEWLINE"
-  printf "$PREFIX"
-  read -r -p " Do you want to nvidia-dkms drivers? [y/N] " response
-
-  if [[ "$response" =~ ^[yY]$ ]]; then
-    printf "nvidia-dkms$NEWLINE" >> packages/base.list
-  fi
+    printf "$PREFIX Nvidia Card detected.$NEWLINE"
+    printf "$PREFIX"
+    read -r -p " Do you want to nvidia-dkms drivers? [y/N] " response
+    
+    if [[ "$response" =~ ^[yY]$ ]]; then
+        printf "nvidia-dkms$NEWLINE" >> packages/base.pkgs
+    fi
 fi
 
 #--------------------#
 # Check Dependencies #
 #--------------------#
 
-DEPENDENCIES=("git" "base-devel")
+DEPENDENCIES=("git" "base-devel" "rsync")
 MISSING_DEPENDENCIES=($(check_missing_dependencies))
 
 # Install missing dependencies
 if [[ ${#MISSING_DEPENDENCIES} -gt 0 ]]; then
-  printf "$PREFIX The following dependencies are missing:$NEWLINE"
-
-  for dep in "${MISSING_DEPENDENCIES[@]}"; do
-    echo "- $dep"
-  done
-
-  printf "$PREFIX"
-  read -r -p " Do you want to install them? [y/N] " response
-
-  if [[ "$response" =~ ^[yY]$ ]]; then
-    install_missing_depedencies "${MISSING_DEPENDENCIES[@]}" "$response"
-
-    if [[ $? -eq 0 ]]; then
-        printf "$PREFIX Dependencies installed.$NEWLINE"
+    printf "$PREFIX The following dependencies are missing:$NEWLINE"
+    
+    for dep in "${MISSING_DEPENDENCIES[@]}"; do
+        echo "- $dep"
+    done
+    
+    printf "$PREFIX"
+    read -r -p " Do you want to install them? [y/N] " response
+    
+    if [[ "$response" =~ ^[yY]$ ]]; then
+        install_missing_depedencies "${MISSING_DEPENDENCIES[@]}" "$response"
+        
+        if [[ $? -eq 0 ]]; then
+            printf "$PREFIX Dependencies installed.$NEWLINE"
+        else
+            echo "$PREFIX Dependency installation failed.$NEWLINE"
+            exit 1
+        fi
     else
-        echo "$PREFIX Dependency installation failed.$NEWLINE"
+        printf "$PREFIX Exiting because required dependencies are not installed...$NEWLINE"
         exit 1
     fi
-  else
-    printf "$PREFIX Exiting because required dependencies are not installed...$NEWLINE"
-    exit 1
-  fi
 else
-  printf "$PREFIX Dependencies are already installed.$NEWLINE"
+    printf "$PREFIX Dependencies are already installed.$NEWLINE"
 fi
 
 #-------------#
@@ -146,11 +151,11 @@ fi
 #-------------#
 
 if pacman -Qq "yay" &> /dev/null; then
-  printf "$PREFIX yay is already installed.$NEWLINE"
+    printf "$PREFIX yay is already installed.$NEWLINE"
 else
-  printf "$PREFIX Installing yay...$NEWLINE"
-  install_yay &&
-  printf "$PREFIX yay has been installed successfully.$NEWLINE"
+    printf "$PREFIX Installing yay...$NEWLINE"
+    install_yay &&
+    printf "$PREFIX yay has been installed successfully.$NEWLINE"
 fi
 
 #------------------#
@@ -165,7 +170,7 @@ install_aur "$AUR_PACKAGES" &&
 printf "$PREFIX Finished installing all packages.$NEWLINE"
 
 #----------------------------#
-# Run through all .lst files #
+# Run through all .list files #
 #----------------------------#
 
-process_lst_file "lists/hyprland.lst"
+process_list_file "lists/hyprland.list"

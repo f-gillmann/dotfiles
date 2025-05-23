@@ -6,7 +6,7 @@
 #----\|  --  *      ---   **   ---      *  --  |   \-#
 
 # Processing each list entry
-process_lst_entry() {
+process_list_entry() {
     local type=$1
     local sourcepath=$2
     local targetpath=$3
@@ -28,19 +28,19 @@ process_lst_entry() {
     # Perform the operation based on type
     case "$type" in
         "B")
-            lst_backup $src
+            list_backup $src
             ;;
         "S")
-            lst_backup $src
-            lst_sync $src $target
+            list_backup $src
+            list_sync $src $target
             ;;
         "O")
-            lst_backup $src
-            lst_overwrite $src $target
+            list_backup $src
+            list_overwrite $src $target
             ;;
         "P")
-            lst_backup $src
-            lst_populate $src $target
+            list_backup $src
+            list_populate $src $target
             ;;
         *)
             exit 1
@@ -48,9 +48,9 @@ process_lst_entry() {
     esac
 }
 
-process_lst_file() {
-    local lst_file="$1"
-    printf "${PREFIX} Processing list \"$lst_file\"...$NEWLINE"
+process_list_file() {
+    local list_file="$1"
+    printf "${PREFIX} Processing list \"$list_file\"...$NEWLINE"
     
     while IFS="|" read -r type sourcepath targetpath target dependency || [[ -n "$type" ]]; do
         # Skip comments and headers
@@ -64,6 +64,6 @@ process_lst_file() {
         [[ -z "$type" ]] && continue
 
         # Process the entry
-        process_lst_entry "$type" "$sourcepath" "$targetpath" "$target" "$dependency"
-    done < "$lst_file"
+        process_list_entry "$type" "$sourcepath" "$targetpath" "$target" "$dependency"
+    done < "$list_file"
 }
