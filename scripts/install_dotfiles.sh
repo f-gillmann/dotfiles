@@ -58,6 +58,10 @@ install_root_dirs() {
     if is_pkg_installed sddm; then
         printf "$PREFIX Installing sddm theme...$NEWLINE"
         
+        if [[ ! -f "/etc/sddm.conf" ]]; then
+            sudo sddm --example-config > /etc/sddm.conf
+        fi
+        
         TEMP_ZIP=$(mktemp --suffix=.zip)
         printf "$PREFIX Downloading theme...$NEWLINE"
         if ! curl -L "https://github.com/catppuccin/sddm/releases/download/v1.0.0/catppuccin-mocha.zip" -o "${TEMP_ZIP}"; then

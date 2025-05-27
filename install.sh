@@ -234,6 +234,8 @@ cp -r ~/.config/waybar "$BACKUP_DIR/.config"
 cp -r ~/.config/kitty "$BACKUP_DIR/.config"
 cp -r ~/.config/wallpapers "$BACKUP_DIR/.config"
 
+sudo cp /etc/sddm.conf "$BACKUP_DIR/sddm.conf"
+
 #------------------#
 # Install dotfiles #
 #------------------#
