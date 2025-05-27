@@ -1,0 +1,3 @@
+[submodule "rice/catppuccin-grub"]
+	path = rice/catppuccin-grub
+	url = https://github.com/catppuccin/grub.git
