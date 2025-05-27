@@ -68,10 +68,9 @@ fi
 # Check if we're running grub and configure it if so
 if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
     # Backup grub files
-    mkdir -p ${BACKUP_DIR}/etc/default
-    mkdir -p ${BACKUP_DIR}/boot/grub
-    sudo cp /etc/default/grub ${BACKUP_DIR}/etc/default/grub
-    sudo cp /boot/grub/grub.cfg ${BACKUP_DIR}/boot/grub/grub.cfg
+    mkdir -p ${BACKUP_DIR}/grub
+    sudo cp /etc/default/grub ${BACKUP_DIR}/grub
+    sudo cp /boot/grub/grub.cfg ${BACKUP_DIR}/grub.cfg
     
     if detect_nvidia; then
         printf "$PREFIX Detected Nvidia GPU, configuring...$NEWLINE"
@@ -227,14 +226,15 @@ printf "$PREFIX Finished installing all packages.$NEWLINE"
 #--------------#
 
 mkdir -p $BACKUP_DIR/.config/
-cp -r ~/.config/hypr "$BACKUP_DIR/.config"
-cp -r ~/.config/kitty "$BACKUP_DIR/.config"
-cp -r ~/.config/rofi "$BACKUP_DIR/.config"
-cp -r ~/.config/waybar "$BACKUP_DIR/.config"
-cp -r ~/.config/kitty "$BACKUP_DIR/.config"
-cp -r ~/.config/wallpapers "$BACKUP_DIR/.config"
+mkdir -p $BACKUP_DIR/sddm/
 
-sudo cp /etc/sddm.conf "$BACKUP_DIR/sddm.conf"
+cp -rL ~/.config/hypr "$BACKUP_DIR/.config"
+cp -rL ~/.config/kitty "$BACKUP_DIR/.config"
+cp -rL ~/.config/rofi "$BACKUP_DIR/.config"
+cp -rL ~/.config/waybar "$BACKUP_DIR/.config"
+cp -rL ~/.config/wallpapers "$BACKUP_DIR/.config"
+
+sudo cp /etc/sddm.conf "$BACKUP_DIR/sddm/sddm.conf"
 
 #------------------#
 # Install dotfiles #
