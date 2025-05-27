@@ -4,7 +4,12 @@ hyprland
 hyprlock
 hyprpaper
 kitty
+layer-shell-qt
+layer-shell-qt5
 nwg-look
+qt5-quickcontrols2
+qt6-declarative
+qt6-svg
 rofi
 sddm
 stow

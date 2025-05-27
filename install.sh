@@ -11,8 +11,8 @@
 
 source ./scripts/functions.sh
 source ./scripts/install_dependencies.sh
+source ./scripts/install_dotfiles.sh
 source ./scripts/install_packages.sh
-source ./scripts/link_dotfiles.sh
 
 #-----------#
 # Variables #
@@ -29,6 +29,7 @@ PREFIX="${COLOR}\$${RESET_COLOR}/${LIGHT_COLOR}>${RESET_COLOR}"
 
 BASE_PACKAGES="packages/base.pkgs"
 AUR_PACKAGES="packages/aur.pkgs"
+CUSTOM_PACKAGES="packages/custom.pkgs"
 
 CURRENT_USER=$(whoami)
 DATE_TIME=$(date +"%Y%m%d_%H%M%S")
@@ -72,13 +73,52 @@ if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
     sudo cp /etc/default/grub ${BACKUP_DIR}/etc/default/grub
     sudo cp /boot/grub/grub.cfg ${BACKUP_DIR}/boot/grub/grub.cfg
     
-    # Thanks to
-    # https://github.com/HyDE-Project/HyDE/blob/a1ed62411cd86426002bb3b0b968ebc0cac9da18/Scripts/install_pre.sh#L27-L28
     if detect_nvidia; then
-        printf "$PREFIX Adding nvidia_drm.modeset=1 to /etc/default/grub...$NEWLINE"
+        printf "$PREFIX Detected Nvidia GPU, configuring...$NEWLINE"
         
-        GCLD=$(grep "^GRUB_CMDLINE_LINUX_DEFAULT=" "/etc/default/grub" | cut -d'"' -f2 | sed 's/\b nvidia_drm.modeset=.\b//g')
-        sudo sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"${GCLD} nvidia_drm.modeset=1\"" /etc/default/grub
+        sudo mkdir -p /etc/modprobe.d
+        echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf > /dev/null
+        
+        # Nvidia modules
+        if [ -f /etc/mkinitcpio.conf ] && command -v mkinitcpio >/dev/null; then
+            current_modules_line=$(sudo grep -E "^MODULES=\s*\([^#]*\)$" /etc/mkinitcpio.conf)
+            
+            if [ -n "$current_modules_line" ]; then
+                current_modules_content=$(echo "$current_modules_line" | sed -E 's/^MODULES=\s*\((.*)\)\s*$/\1/')
+                normalized_current_modules=" $(echo "$current_modules_content" | tr -s ' ') "
+                
+                required_nvidia_modules=("nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm")
+                modules_to_actually_append=()
+                
+                for module_name in "${required_nvidia_modules[@]}"; do
+                    if ! echo "$normalized_current_modules" | grep -q " $module_name "; then
+                        modules_to_actually_append+=("$module_name")
+                    fi
+                done
+                
+                if [ ${#modules_to_actually_append[@]} -gt 0 ]; then
+                    string_of_modules_to_append=""
+                    for new_module in "${modules_to_actually_append[@]}"; do
+                        string_of_modules_to_append="$string_of_modules_to_append $new_module"
+                    done
+                    
+                    if [[ -n "$current_modules_content" && ! "$current_modules_content" =~ ^[[:space:]]*$ ]]; then
+                        updated_modules_content="$current_modules_content$string_of_modules_to_append"
+                    else
+                        updated_modules_content="${string_of_modules_to_append# }"
+                    fi
+                    
+                    cleaned_updated_modules_content=$(echo "$updated_modules_content" | xargs)
+                    new_mkinitcpio_modules_line="MODULES=($cleaned_updated_modules_content)"
+                    
+                    if sudo sed -i.mkinitcpio_nvidia.bak -E "s|^MODULES=\s*\([^#]*\)$|$new_mkinitcpio_modules_line|" /etc/mkinitcpio.conf; then
+                        printf "$PREFIX NVIDIA modules updated in /etc/mkinitcpio.conf.$NEWLINE"
+                    else
+                        printf "$PREFIX ERROR: Failed to update /etc/mkinitcpio.conf.$NEWLINE"
+                    fi
+                fi
+            fi
+        fi
     fi
     
     sudo sed -i "/^GRUB_DEFAULT=/c\GRUB_DEFAULT=saved
@@ -105,7 +145,12 @@ if detect_nvidia && ! is_pkg_installed nvidia-dkms; then
     read -r -p " Do you want to nvidia-dkms drivers? [y/N] " response
     
     if [[ "$response" =~ ^[yY]$ ]]; then
-        printf "nvidia-dkms$NEWLINE" >> packages/base.pkgs
+        touch $CUSTOM_PACKAGES
+        printf "${NEWLINE}nvidia-dkms${NEWLINE}nvidia-utils${NEWLINE}egl-wayland${NEWLINE}libva-nvidia-driver${NEWLINE}" >> $CUSTOM_PACKAGES
+        
+        if grep -qE "^\s*\[multilib\]" /etc/pacman.conf 2>/dev/null; then
+            printf "lib32-nvidia-utils${NEWLINE}" >> "$CUSTOM_PACKAGES"
+        fi
     fi
 fi
 
@@ -144,6 +189,12 @@ else
     printf "$PREFIX Dependencies are already installed.$NEWLINE"
 fi
 
+#-------------------------------------#
+# Init submodules if not done already #
+#-------------------------------------#
+
+git submodule update --init --recursive
+
 #-------------#
 # Install yay #
 #-------------#
@@ -165,21 +216,31 @@ printf "$PREFIX Proceeding to package installation...$NEWLINE"
 install_base "$BASE_PACKAGES" &&
 install_aur "$AUR_PACKAGES" &&
 
+if [[ -f "$CUSTOM_PACKAGES" ]]; then
+    install_base "$CUSTOM_PACKAGES"
+fi
+
 printf "$PREFIX Finished installing all packages.$NEWLINE"
 
 #--------------#
 # Backup files #
 #--------------#
 
-cp ~/.config/hypr "$BACKUP_DIR/.config/hypr"
+mkdir -p $BACKUP_DIR/.config/
+cp -r ~/.config/hypr "$BACKUP_DIR/.config"
+cp -r ~/.config/kitty "$BACKUP_DIR/.config"
+cp -r ~/.config/rofi "$BACKUP_DIR/.config"
+cp -r ~/.config/waybar "$BACKUP_DIR/.config"
+cp -r ~/.config/kitty "$BACKUP_DIR/.config"
+cp -r ~/.config/wallpapers "$BACKUP_DIR/.config"
 
-#-------------------------#
-# Link dotfiles with stow #
-#-------------------------#
+#------------------#
+# Install dotfiles #
+#------------------#
 
-printf "$PREFIX Linking dotfiles using stow...$NEWLINE"
+printf "$PREFIX Installing dotfiles...$NEWLINE"
 
-link_home_dir
-link_home_dir
+install_home_dir
+install_root_dirs
 
-printf "$PREFIX Finished linking dotfiles using stow...$NEWLINE"
+printf "$PREFIX Finished installing dotfiles...$NEWLINE"
