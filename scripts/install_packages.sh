@@ -6,33 +6,33 @@
 #----\|  --  *      ---   **   ---      *  --  |   \-#
 
 install_base() {
-  if [[ -f "$1" ]]; then
-    printf "$PREFIX Installing base packages from $1...$NEWLINE"
-    
-    sudo pacman -Syq --needed --noconfirm - < "$1" 2>&1 | sed 's/warning:/ ->/g;' || {
-      printf "$PREFIX Error: Failed to install base packages.$NEWLINE"
-      exit 1
-    }
-    
-    printf "$PREFIX Base packages installed successfully.$NEWLINE"
-  else
-    printf "$PREFIX Error: Base package list '$1' not found.$NEWLINE"
-    exit 1
-  fi
+    if [[ -f "$1" ]]; then
+        printf "$PREFIX Installing base packages from $1...$NEWLINE"
+        
+        sudo pacman -Syq --needed --noconfirm - < "$1" 2>&1 | sed 's/warning:/ ->/g;' || {
+            printf "$PREFIX Error: Failed to install base packages.$NEWLINE"
+            exit 1
+        }
+        
+        printf "$PREFIX Base packages installed successfully.$NEWLINE"
+    else
+        printf "$PREFIX Error: Base package list '$1' not found.$NEWLINE"
+        exit 1
+    fi
 }
 
 install_aur() {
-  if [[ -f "$1" ]]; then
-    printf "$PREFIX Installing AUR packages from $1...$NEWLINE"
-    
-    yay -Syq --needed --noconfirm - < "$1" || {
-      printf "$PREFIX Error: Failed to install AUR packages.$NEWLINE"
-      exit 1
-    }
-    
-    printf "$PREFIX AUR packages installed successfully.$NEWLINE"
-  else
-    printf "$PREFIX Error: AUR package list '$1' not found.$NEWLINE"
-    exit 1
-  fi
+    if [[ -f "$1" ]]; then
+        printf "$PREFIX Installing AUR packages from $1...$NEWLINE"
+        
+        yay -Syq --needed --noconfirm - < "$1" || {
+            printf "$PREFIX Error: Failed to install AUR packages.$NEWLINE"
+            exit 1
+        }
+        
+        printf "$PREFIX AUR packages installed successfully.$NEWLINE"
+    else
+        printf "$PREFIX Error: AUR package list '$1' not found.$NEWLINE"
+        exit 1
+    fi
 }

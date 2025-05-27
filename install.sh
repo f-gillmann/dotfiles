@@ -10,11 +10,9 @@
 #----------------#
 
 source ./scripts/functions.sh
-source ./scripts/install_packages.sh
 source ./scripts/install_dependencies.sh
-source ./scripts/backup.sh
-source ./scripts/list.sh
-source ./scripts/list_functions.sh
+source ./scripts/install_packages.sh
+source ./scripts/link_dotfiles.sh
 
 #-----------#
 # Variables #
@@ -34,9 +32,9 @@ AUR_PACKAGES="packages/aur.pkgs"
 
 CURRENT_USER=$(whoami)
 DATE_TIME=$(date +"%Y%m%d_%H%M%S")
+SCRIPT_DIR=$(dirname "$0")
 BACKUP_NAME="backup_dotfiles_f-gillmann_${DATE_TIME}"
 BACKUP_DIR="./$BACKUP_NAME"
-BACKUP_ARCHIVE="$BACKUP_NAME.tar.gz"
 mkdir -p "$BACKUP_DIR"
 
 #-----------------#
@@ -83,9 +81,9 @@ if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
         sudo sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT=\"${GCLD} nvidia_drm.modeset=1\"" /etc/default/grub
     fi
     
-    # TODO: Add grub themes
     sudo sed -i "/^GRUB_DEFAULT=/c\GRUB_DEFAULT=saved
-               /^GRUB_GFXMODE=/c\GRUB_GFXMODE=1280x1024x32,auto
+    /^GRUB_GFXMODE=/c\GRUB_GFXMODE=1280x1024x32,auto
+    /^GRUB_DISABLE_OS_PROBER=/c\GRUB_DISABLE_OS_PROBER=false,auto
     /^#GRUB_SAVEDEFAULT=true/c\GRUB_SAVEDEFAULT=true" /etc/default/grub
     
     sudo grub-mkconfig -o /boot/grub/grub.cfg
@@ -115,7 +113,7 @@ fi
 # Check Dependencies #
 #--------------------#
 
-DEPENDENCIES=("git" "base-devel" "rsync")
+DEPENDENCIES=("git" "base-devel" "stow")
 MISSING_DEPENDENCIES=($(check_missing_dependencies))
 
 # Install missing dependencies
@@ -169,8 +167,19 @@ install_aur "$AUR_PACKAGES" &&
 
 printf "$PREFIX Finished installing all packages.$NEWLINE"
 
-#----------------------------#
-# Run through all .list files #
-#----------------------------#
+#--------------#
+# Backup files #
+#--------------#
 
-process_list_file "lists/hyprland.list"
+cp ~/.config/hypr "$BACKUP_DIR/.config/hypr"
+
+#-------------------------#
+# Link dotfiles with stow #
+#-------------------------#
+
+printf "$PREFIX Linking dotfiles using stow...$NEWLINE"
+
+link_home_dir
+link_home_dir
+
+printf "$PREFIX Finished linking dotfiles using stow...$NEWLINE"
