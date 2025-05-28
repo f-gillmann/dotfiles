@@ -36,7 +36,6 @@ DATE_TIME=$(date +"%Y%m%d_%H%M%S")
 SCRIPT_DIR=$(dirname "$0")
 BACKUP_NAME="backup_dotfiles_f-gillmann_${DATE_TIME}"
 BACKUP_DIR="./$BACKUP_NAME"
-mkdir -p "$BACKUP_DIR"
 
 #-----------------#
 # Print Ascii Art #
@@ -47,6 +46,12 @@ print_ascii_art $COLOR $LIGHT_COLOR
 #--------------#
 # System Check #
 #--------------#
+
+# Check if we're running with root
+if [ "$EUID" -eq 0 ]; then
+    printf "$PREFIX You are running this script with sudo or as root, please stop, exiting...$NEWLINE"
+    exit 1
+fi
 
 # Check if we're on an arch system
 if ! grep -qsE '(ID=arch|ID_LIKE=arch)' /etc/*-release; then
@@ -68,9 +73,9 @@ fi
 # Check if we're running grub and configure it if so
 if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
     # Backup grub files
-    mkdir -p ${BACKUP_DIR}/grub
-    sudo cp /etc/default/grub ${BACKUP_DIR}/grub
-    sudo cp /boot/grub/grub.cfg ${BACKUP_DIR}/grub.cfg
+    mkdir -p $BACKUP_DIR/grub
+    sudo cp /etc/default/grub $BACKUP_DIR/grub
+    sudo cp /boot/grub/grub.cfg $BACKUP_DIR/grub.cfg
     
     if detect_nvidia; then
         printf "$PREFIX Detected Nvidia GPU, configuring...$NEWLINE"

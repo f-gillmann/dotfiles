@@ -88,6 +88,9 @@ install_root_dirs() {
         -e "/^\s*\[Theme\]\s*$/,/^\s*\[/ { /^\s*Current\s*=/d; }" \
         -e "/^\s*\[Theme\]\s*$/a Current=catppuccin-mocha" \
         "/etc/sddm.conf"
+
+        printf "$PREFIX Enabled sddm service, active on next reboot.$NEWLINE"
+        sudo systemctl enable sddm.service
     fi
     
     cd ".."
