@@ -11,7 +11,7 @@ install_home_dir() {
     cd "$rice_dir"
     printf "$PREFIX Installing dotfiles to $HOME...$NEWLINE"
     
-    stow --target="$HOME" hypr-catppuccin hyprland hyprlock hyprpaper kitty rofi waybar
+    stow --target="$HOME" hypr-catppuccin hyprcursor hyprland hyprlock hyprpaper kitty rofi waybar
     
     if detect_nvidia; then
         stow --target="$HOME" hypr-nvidia
@@ -59,7 +59,8 @@ install_root_dirs() {
         printf "$PREFIX Installing sddm theme...$NEWLINE"
         
         if [[ ! -f "/etc/sddm.conf" ]]; then
-            sudo sddm --example-config > /etc/sddm.conf
+            printf "$PREFIX Generating new sddm config because it didn't exist yet...$NEWLINE"
+            sddm --example-config | sudo tee /etc/sddm.conf > /dev/null
         fi
         
         TEMP_ZIP=$(mktemp --suffix=.zip)

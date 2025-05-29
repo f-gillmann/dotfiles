@@ -233,6 +233,7 @@ printf "$PREFIX Finished installing all packages.$NEWLINE"
 mkdir -p $BACKUP_DIR/.config/
 mkdir -p $BACKUP_DIR/sddm/
 
+cp -rL ~/.zshrc "$BACKUP_DIR/"
 cp -rL ~/.config/hypr "$BACKUP_DIR/.config"
 cp -rL ~/.config/kitty "$BACKUP_DIR/.config"
 cp -rL ~/.config/rofi "$BACKUP_DIR/.config"

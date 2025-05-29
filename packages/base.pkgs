@@ -1,11 +1,15 @@
 btop
 dolphin
+hyprcursor
 hyprland
+hyprland-qtutils 
 hyprlock
 hyprpaper
+hyprpolkitagent
 kitty
 layer-shell-qt
 layer-shell-qt5
+libnewt
 nwg-look
 qt5-quickcontrols2
 qt6-declarative
@@ -13,6 +17,9 @@ qt6-svg
 rofi
 sddm
 stow
+swaync
 ttf-firacode-nerd
+uwsm
 vim
+waybar
 zsh
