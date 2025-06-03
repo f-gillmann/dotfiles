@@ -61,7 +61,7 @@ is_pkg_installed() {
 detect_nvidia() {
     readarray -t GPU < <(lspci -k | grep -E "VGA|3D" | awk -F ': ' '{print $NF}')
 
-    if grep -iq nvidia <<<"${dGPU[@]}"; then
+    if grep -iq nvidia <<<"${GPU[@]}"; then
       return 0
     else
       return 1

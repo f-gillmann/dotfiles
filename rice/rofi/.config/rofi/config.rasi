@@ -1,16 +1,14 @@
-@theme "catppuccin-default"
+@theme "~/.cache/wal/colors-rofi-dark.rasi"
 
-configuration{
-    modi: "run,window,combi";
-    icon-theme: "Oranchelo";
+configuration {
+    modi: "window,drun";
     show-icons: true;
+    font: "FiraCode Nerd Font 12";
     terminal: "kitty";
     drun-display-format: "{icon} {name}";
     location: 0;
     disable-history: false;
     hide-scrollbar: true;
-    display-combi: " 📦  All ";
-    display-run: " ⚡  Run ";
-    display-window: " 🪟  Window";
+    display-drun: "";
     sidebar-mode: true;
 }

@@ -126,7 +126,7 @@ if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
     fi
     
     sudo sed -i "/^GRUB_DEFAULT=/c\GRUB_DEFAULT=saved
-    /^GRUB_GFXMODE=/c\GRUB_GFXMODE=1280x1024x32,auto
+    /^GRUB_GFXMODE=/c\GRUB_GFXMODE=1920x1080x32,auto
     /^GRUB_DISABLE_OS_PROBER=/c\GRUB_DISABLE_OS_PROBER=false,auto
     /^#GRUB_SAVEDEFAULT=true/c\GRUB_SAVEDEFAULT=true" /etc/default/grub
     
@@ -162,7 +162,7 @@ fi
 # Check Dependencies #
 #--------------------#
 
-DEPENDENCIES=("git" "base-devel" "stow")
+DEPENDENCIES=("git" "base-devel" "stow" "unzip")
 MISSING_DEPENDENCIES=($(check_missing_dependencies))
 
 # Install missing dependencies

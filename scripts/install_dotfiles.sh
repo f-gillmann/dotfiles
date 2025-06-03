@@ -11,15 +11,18 @@ install_home_dir() {
     cd "$rice_dir"
     printf "$PREFIX Installing dotfiles to $HOME...$NEWLINE"
     
-    stow --target="$HOME" hypr-catppuccin hyprcursor hyprland hyprlock hyprpaper kitty rofi waybar
+    stow --target="$HOME" hyprcursor hyprland hyprlock hyprpaper kitty rofi swaync wallpapers waybar zsh
     
     if detect_nvidia; then
         stow --target="$HOME" hypr-nvidia
-        
     fi
     
     cd ".."
     printf "$PREFIX Finished installing home directory dotfiles.$NEWLINE"
+
+    mkdir -p $HOME/.local/bin
+    cp ./update-rice.sh $HOME/.local/bin
+    chmod +x $HOME/.local/bin/update-rice.sh
 }
 
 install_root_dirs() {
