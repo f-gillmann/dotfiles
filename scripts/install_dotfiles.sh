@@ -11,7 +11,7 @@ install_home_dir() {
     cd "$rice_dir"
     printf "$PREFIX Installing dotfiles to $HOME...$NEWLINE"
     
-    stow --target="$HOME" hyprcursor hyprland hyprlock hyprpaper kitty rofi swaync wallpapers waybar zsh
+    stow --target="$HOME" hellwal hyprcursor hyprland hyprlock hyprpaper kitty rofi swaync wallpapers waybar zsh
     
     if detect_nvidia; then
         stow --target="$HOME" hypr-nvidia
