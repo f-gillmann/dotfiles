@@ -1,4 +1,4 @@
-@theme "~/.cache/wal/colors-rofi-dark.rasi"
+@theme "~/.cache/hellwal/colors-rofi.rasi"
 
 configuration {
     modi: "window,drun";

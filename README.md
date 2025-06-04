@@ -6,10 +6,12 @@ Hyprland Dotfiles [WIP]
 > - This is still work in progress, **stuff will break**!
 > - I am not responsible for any damage to your machine!
 
-### Nvidia ⚠️
-If you happen to have a Nvidia GPU, please either add your linux kernels headers to `packages/custom.pkgs` or install them beforehand, this file does not exist by default.
+The install script assumes that you are using a base Arch Linux, without any big modifications or desktop environments preinstalled.
 
-For the base `linux` kernel need to add `linux-headers`, for the `linux-zen` kernel you need to add `linux-zen-headers` instead etc.
+**But** the script still tries to back up *some* of your dotfiles already present in `~/.config` and it will also backup your `grub` and `sddm` configs. Review the `Backup files` block inside the `install.sh` script to see what is being backed up.
+
+### Nvidia
+If you happen to have a Nvidia GPU, please either add your linux headers (e.g. `linux-headers`) to `packages/custom.pkgs` or install them beforehand, this file does not exist by default.
 
 ### Method 1:
 Use the `get.sh` script to automatically download the repository.
@@ -28,20 +30,3 @@ cd dotfiles &&
 chmod +x ./install.sh &&
 ./install.sh
 ```
-
-## Dependencies
-| Type              | Dependency        | 
-| ----------------- | ----------------- |
-| Window Manager    | hyprland          |
-| Screen Lock       | hyprlock          |
-| Wallpaper         | swww              |
-| Logout Menu       | rofi              |
-| Display Manager   | ly                |
-| Terminal Emulator | kitty             |
-| Shell             | zsh + oh-my-zsh   |
-| Prompt            | powerlevel10k     |
-| File Manager      | dolphin           |
-| Editor            | neovim            |
-| Browser           | librewolf         |
-| Bootloader        | grub              |
-| Widgets           | ags               |

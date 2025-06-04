@@ -13,7 +13,7 @@ NEWLINE="\n"
 PREFIX="${COLOR}\$${RESET_COLOR}/${LIGHT_COLOR}>${RESET_COLOR}"
 
 # Check if dependencies are missing
-DEPENDENCIES=("unzip" "curl")
+DEPENDENCIES=("git")
 MISSING_DEPENDENCIES=()
 for dep in "${DEPENDENCIES[@]}"; do
     if ! pacman -Qq "$dep" &> /dev/null; then
@@ -32,38 +32,33 @@ if [[ ${#MISSING_DEPENDENCIES} -gt 0 ]]; then
     exit 1
 fi
 
-printf "$PREFIX Downloading files from ${LIGHT_COLOR}${UNDERLINE}https://github.com/f-gillmann/dotfiles${RESET_COLOR}.$NEWLINE"
+printf "$PREFIX Cloning files from ${LIGHT_COLOR}${UNDERLINE}https://github.com/f-gillmann/dotfiles${RESET_COLOR}.$NEWLINE"
+cd $HOME
 
-# Check if the f-gillmann-dots directory exists
-if [ -d "f-gillmann-dots" ]; then
+# Check if the dotfiles directory exists
+if [ -d "dotfiles" ]; then
     printf "$PREFIX"
-    read -r -p " f-gillmann-dots already exists. Do you want to overwrite it? [y/N]: " overwrite
+    read -r -p " dotfiles already exists. Do you want to overwrite it? [y/N]: " overwrite
     if [[ $overwrite =~ ^[Yy]$ ]]; then
         # Remove existing directory
-        rm -rf f-gillmann-dots
+        rm -rf dotfiles
     else
         printf "$PREFIX Exiting...$NEWLINE"
         exit 1
     fi
 fi
 
-# Download the repository from github
-TEMP_DIR=$(mktemp -d) &&
-curl -sS -L -o master.zip "https://github.com/f-gillmann/dotfiles/archive/refs/heads/master.zip" &&
-unzip -qq master.zip -d $TEMP_DIR &&
-mkdir f-gillmann-dots &&
-mv $TEMP_DIR/dotfiles-master/* f-gillmann-dots/ &&
-rm -rf $TEMP_DIR master.zip &&
+git clone --recurse-submodules https://github.com/f-gillmann/dotfiles.git
 
-printf "$PREFIX Dotfiles have been downloaded and extracted into f-gillmann-dots.$NEWLINE"
+printf "$PREFIX Dotfiles have been cloned into ~/dotfiles.$NEWLINE"
 
 # Prompt if we wanna run the install script
 printf "$PREFIX"
-read -r -p " Do you want to run the install script now? [y/N]: " overwrite
-if [[ $overwrite =~ ^[yY]$ ]]; then
-    cd ./f-gillmann-dots &&
-    chmod +x ./install.sh
-    bash ./install.sh
+read -r -p " Do you want to run the install script now? [y/N]: " install
+if [[ $install =~ ^[yY]$ ]]; then
+    cd ./dotfiles &&
+    chmod +x ./install.sh &&
+    ./install.sh
 else
     printf "$PREFIX Exiting...$NEWLINE"
     exit 1

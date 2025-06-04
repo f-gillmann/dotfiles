@@ -237,10 +237,18 @@ cp -rL ~/.zshrc "$BACKUP_DIR/"
 cp -rL ~/.config/hypr "$BACKUP_DIR/.config"
 cp -rL ~/.config/kitty "$BACKUP_DIR/.config"
 cp -rL ~/.config/rofi "$BACKUP_DIR/.config"
+cp -rL ~/.config/swaync "$BACKUP_DIR/.config"
 cp -rL ~/.config/waybar "$BACKUP_DIR/.config"
-cp -rL ~/.config/wallpapers "$BACKUP_DIR/.config"
 
 sudo cp /etc/sddm.conf "$BACKUP_DIR/sddm/sddm.conf"
+
+#-------------------#
+# Install oh-my-zsh #
+#-------------------#
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+rm -f .zshrc*
+chsh -s $(which zsh)
 
 #------------------#
 # Install dotfiles #
