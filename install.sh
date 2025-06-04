@@ -246,9 +246,11 @@ sudo cp /etc/sddm.conf "$BACKUP_DIR/sddm/sddm.conf"
 # Install oh-my-zsh #
 #-------------------#
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-rm -f .zshrc*
-chsh -s $(which zsh)
+if [ -d ".oh-my-zsh" ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    rm -f .zshrc*
+    chsh -s $(which zsh)
+fi
 
 #------------------#
 # Install dotfiles #
