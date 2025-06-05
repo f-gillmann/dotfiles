@@ -1,18 +1,30 @@
 #!/usr/bin/env bash
 
-current_wallpaper_path=$(readlink "$HOME/.current_wallpaper")
-new_wallpaper_path=$(readlink -f "$1")
+default_wallpaper="$HOME/.config/wallpapers/default.png"
+current_wallpaper_path=$(readlink "$HOME/.current_wallpaper" || echo "")
+new_wallpaper_path="$(readlink -f $1)"
 
 check_file() {
     if [ ! -f "$1" ]; then
-        exit 1
+        return 1
     fi
 }
 
 main() {
-    check_file "$new_wallpaper_path"
+    if [ -z "$1" ] || [ "$(check_file "$new_wallpaper_path"; echo $?)" != "0" ]; then
+        if [ ! -f "$default_wallpaper" ]; then
+            echo "Error: Default wallpaper '$default_wallpaper' does not exist"
+            exit 1
+        fi
 
-    ln -sf "$new_wallpaper_path" "$HOME/.current_wallpaper" &&
+        ln -sf "$default_wallpaper" "$HOME/.current_wallpaper"
+    else
+        ln -sf "$new_wallpaper_path" "$HOME/.current_wallpaper"
+    fi
+
+    current_wallpaper_path=$(readlink "$HOME/.current_wallpaper")
+
+    mkdir -p $HOME/.cache/hellwal/ &&
     hellwal -i "$current_wallpaper_path" -f "$HOME/.config/hellwal/templates/" -o "$HOME/.cache/hellwal/" &&
     source "$HOME/.config/hypr/scripts/reload.sh"
 }
