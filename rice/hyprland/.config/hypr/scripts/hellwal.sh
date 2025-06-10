@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-default_wallpaper="$HOME/.config/wallpapers/default.png"
+default_wallpaper="$HOME/.config/wallpapers/default"
 current_wallpaper_path=$(readlink "$HOME/.current_wallpaper" || echo "")
 new_wallpaper_path="$(readlink -f $1)"
 
