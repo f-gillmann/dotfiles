@@ -1,6 +1,7 @@
 brightnessctl
 btop
 dolphin
+fd
 hyprcursor
 hyprland
 hyprlock
@@ -28,4 +29,5 @@ ttf-firacode-nerd
 uwsm
 vim
 waybar
+xdg-user-dirs
 zsh

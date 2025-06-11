@@ -1,5 +1,12 @@
 @import url("../../.cache/hellwal/colors-waybar.css");
 
+@define-color backgroundcolor @color10;
+@define-color bordercolor @color5;
+@define-color textcolor1 @color7;
+@define-color iconcolor @color7;
+@define-color workspacesbackground @color1;
+@define-color hoverbackground @color14;
+
 * {
     font-family: MonaspiceNe Nerd Font, FiraCode Nerd Font;
     font-size: 14px;
