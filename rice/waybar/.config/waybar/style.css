@@ -1,10 +1,10 @@
 @import url("../../.cache/hellwal/colors-waybar.css");
 
-@define-color backgroundcolor @color10;
+@define-color backgroundcolor @color3;
 @define-color bordercolor @color5;
-@define-color textcolor1 @color7;
-@define-color iconcolor @color7;
-@define-color workspacesbackground @color1;
+@define-color textcolor @color15;
+@define-color iconcolor @color15;
+@define-color activebackground @color2;
 @define-color hoverbackground @color14;
 
 * {
@@ -19,38 +19,38 @@
 
 window#waybar {
     background: transparent;
-    color: @color15;
+    color: @textcolor;
 }
 
 /* Workspaces ------------------------- */
 
 #workspaces {
-    background: @color3;
+    background: @backgroundcolor;
     padding: 0;
     border-radius: 8px;
 }
 
 #workspaces button {
     padding: 0 0.5rem;
-    color: @color13;
+    color: @textcolor;
     border-radius: 0;
 }
 
 #workspaces button.active {
-    background: @color5;
-    color: @color0;
+    background: @activebackground;
+    color: @bordercolor;
 }
 
 #workspaces button:hover {
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid transparent;
-    color: @color7;
+    color: @textcolor;
     text-shadow: inherit;
 }
 
 #workspaces button.active:hover {
-    background: @color13;
-    color: @color0;
+    background: @hoverbackground;
+    color: @bordercolor;
 }
 
 #workspaces button.focused {
@@ -73,7 +73,7 @@ window#waybar {
 
 #window {
     padding: 0 0.5rem;
-    background: @color3;
+    background: @backgroundcolor;
     border-radius: 8px;
 }
 
@@ -81,19 +81,13 @@ window#waybar.empty #window {
     background-color: transparent;
 }
 
-/* Modules R ------------------------- */
-
-.modules-right {
-    padding: 0 0.5rem;
-    background: @color3;
-    border-radius: 8px;
-}
-
 /* Tray ------------------------------ */
 
 #tray {
-    padding: 0px 12px 0px 0px;
-    margin-right: 12px;
+    padding: 0 0.5rem;
+    background: @backgroundcolor;
+    border-radius: 8px;
+    color: @textcolor;
 }
 
 #tray:first-child:last-child {
@@ -115,18 +109,15 @@ window#waybar.empty #window {
 /* Battery --------------------------- */
 
 #battery {
-    padding: 0;
-    margin-right: 12px;
-}
-
-#battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: steps(12);
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+    padding: 0 0.5rem;
+    background: @backgroundcolor;
+    border-radius: 8px;
 }
 
 /* Clock ----------------------------- */
+
+#clock {
+    padding: 0 0.5rem;
+    background: @backgroundcolor;
+    border-radius: 8px;
+}
