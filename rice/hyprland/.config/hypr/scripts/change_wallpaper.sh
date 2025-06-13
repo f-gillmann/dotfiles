@@ -2,8 +2,8 @@
 
 WALLPAPER_DIR=~/Pictures/wallpapers/
 
-wallpapers=$(fd -tf -e jpg -e png "$WALLPAPER_DIR")
-selected=$(echo "$wallpapers" | rofi -dmenu -p "Select wallpaper:")
+wallpapers=$(fd -tf -e jpg -e png . "$WALLPAPER_DIR")
+selected=$(echo "$wallpapers" | rofi -dmenu -p "Select wallpaper")
 
 if [ -n "$selected" ]; then
     ~/.config/hypr/scripts/hellwal.sh "$selected"

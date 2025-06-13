@@ -1,11 +1,11 @@
 @import url("../../.cache/hellwal/colors-waybar.css");
 
 @define-color backgroundcolor @color3;
-@define-color bordercolor @color5;
+@define-color bordercolor @color13;
 @define-color textcolor @color15;
+@define-color activecolor @color7;
 @define-color iconcolor @color15;
-@define-color activebackground @color2;
-@define-color hoverbackground @color14;
+@define-color activebackground @color4;
 
 * {
     font-family: MonaspiceNe Nerd Font, FiraCode Nerd Font;
@@ -38,18 +38,18 @@ window#waybar {
 
 #workspaces button.active {
     background: @activebackground;
-    color: @bordercolor;
+    color: @activecolor;
 }
 
 #workspaces button:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.1);
     border: 1px solid transparent;
-    color: @textcolor;
+    color: @bordercolor;
     text-shadow: inherit;
 }
 
 #workspaces button.active:hover {
-    background: @hoverbackground;
+    background: rgba(0, 0, 0, 0.1);
     color: @bordercolor;
 }
 
@@ -88,14 +88,7 @@ window#waybar.empty #window {
     background: @backgroundcolor;
     border-radius: 8px;
     color: @textcolor;
-}
-
-#tray:first-child:last-child {
-    padding: 0;
-}
-
-#tray:last-child:not(:first-child) {
-    padding: 0;
+    margin-right: 8px;
 }
 
 #tray > .passive {
@@ -112,6 +105,7 @@ window#waybar.empty #window {
     padding: 0 0.5rem;
     background: @backgroundcolor;
     border-radius: 8px;
+    margin-right: 8px;
 }
 
 /* Clock ----------------------------- */
