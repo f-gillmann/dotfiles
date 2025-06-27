@@ -1,0 +1,57 @@
+@define-color text @foreground;
+@define-color border @color8;
+
+* {
+    color: @text;
+    all: unset;
+    font-size: 16px;
+    font-family: "MonaspiceNe Nerd Font Mono";
+    transition: 150ms;
+}
+
+.floating-notifications.background .notification-row .notification-background {
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+    border-radius: 12px;
+    margin: 0 16px 8px 0;
+    padding: 0;
+}
+
+.floating-notifications.background .notification-row:first-child .notification-background {
+    margin-top: 16px;
+}
+
+.floating-notifications.background .notification-row .notification-background .notification {
+    background: alpha(@background, 0.65);
+    border: 2px solid @border;
+    border-radius: 12px;
+    padding: 8px
+}
+
+.floating-notifications.background .notification-row .notification-background .close-button {
+    margin: 6px;
+    padding: 2px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+}
+
+.floating-notifications.background .notification-row .notification-background .close-button:hover {
+    background-color: @color6;
+}
+
+.floating-notifications.background .notification-row .notification-background .close-button:active {
+    background-color: @color6;
+    color: @color9;
+}
+
+.image {
+    margin: 8px 18px 8px 0px;
+}
+
+.summary {
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.body {
+    font-size: 1rem;
+}

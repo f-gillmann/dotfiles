@@ -1,11 +1,9 @@
-@import url("../../.cache/hellwal/colors-waybar.css");
+@import url("../../.cache/wallust/colors/waybar.css");
 
-@define-color backgroundcolor @color3;
-@define-color bordercolor @color13;
-@define-color textcolor @color15;
-@define-color activecolor @color7;
-@define-color iconcolor @color15;
-@define-color activebackground @color4;
+@define-color border @color10;
+@define-color foreground-alt @color6;
+@define-color foreground-hover @color14;
+@define-color background-alt rgba(255, 255, 255, 0.12);
 
 * {
     font-family: MonaspiceNe Nerd Font, FiraCode Nerd Font;
@@ -19,38 +17,38 @@
 
 window#waybar {
     background: transparent;
-    color: @textcolor;
+    color: @foreground;
 }
 
 /* Workspaces ------------------------- */
 
 #workspaces {
-    background: @backgroundcolor;
+    background: @background;
     padding: 0;
     border-radius: 8px;
 }
 
 #workspaces button {
     padding: 0 0.5rem;
-    color: @textcolor;
+    color: @foreground;
     border-radius: 0;
 }
 
 #workspaces button.active {
-    background: @activebackground;
-    color: @activecolor;
+    background: @background-alt;
+    color: @foreground-alt;
 }
 
 #workspaces button:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: @background-alt;
     border: 1px solid transparent;
-    color: @bordercolor;
+    color: @foreground-alt;
     text-shadow: inherit;
 }
 
 #workspaces button.active:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: @bordercolor;
+    background: @background-alt;
+    color: @foreground-alt;
 }
 
 #workspaces button.focused {
@@ -73,7 +71,7 @@ window#waybar {
 
 #window {
     padding: 0 0.5rem;
-    background: @backgroundcolor;
+    background: @background;
     border-radius: 8px;
 }
 
@@ -85,25 +83,27 @@ window#waybar.empty #window {
 
 #tray {
     padding: 0 0.5rem;
-    background: @backgroundcolor;
+    background: @background;
     border-radius: 8px;
-    color: @textcolor;
+    color: @foreground;
     margin-right: 8px;
 }
 
 #tray > .passive {
     -gtk-icon-effect: dim;
+    color: @foreground;
 }
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
+    color: @foreground;
 }
 
 /* Battery --------------------------- */
 
 #battery {
     padding: 0 0.5rem;
-    background: @backgroundcolor;
+    background: @background;
     border-radius: 8px;
     margin-right: 8px;
 }
@@ -112,6 +112,6 @@ window#waybar.empty #window {
 
 #clock {
     padding: 0 0.5rem;
-    background: @backgroundcolor;
+    background: @background;
     border-radius: 8px;
 }

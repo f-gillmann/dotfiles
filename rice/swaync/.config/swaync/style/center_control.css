@@ -1,0 +1,209 @@
+@define-color text @foreground;
+@define-color border @color8;
+
+* {
+    color: @text;
+    all: unset;
+    font-size: 16px;
+    font-family: "MonaspiceNe Nerd Font Mono";
+    transition: 150ms;
+}
+
+.blank-window {
+    background: transparent;
+}
+
+/* Control Center -------------------- */
+.control-center {
+    background: alpha(@background, 0.65);
+    border-radius: 12px;
+    border: 2px solid @border;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .2);
+    margin: 6px;
+    padding: 0 8px;
+}
+
+/* Notifications --------------------- */
+.control-center .notification-row .notification-background {
+    border-radius: 16px;
+    margin: 4px 0px;
+    padding: 4px;
+}
+
+.control-center .notification-row .notification-background .notification .notification-content {
+    margin: 6px;
+    padding: 8px 6px 2px 2px;
+}
+
+/* Buttons */
+
+.control-center .notification-row .notification-background .close-button {
+    background: transparent;
+    border-radius: 6px;
+    color: @text;
+    margin: 0px;
+    padding: 4px;
+}
+
+.control-center .notification-row .notification-background .close-button:hover {
+    background-color: @color2;
+}
+
+.control-center .notification-row .notification-background .close-button:active {
+    background-color: @color2;
+}
+
+/* Notifications expanded-group */
+
+.notification-group {
+    margin: 2px 8px 2px 8px;
+
+}
+
+.notification-group-headers {
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: @text;
+    letter-spacing: 2px;
+}
+
+.notification-group-icon {
+    color: @text;
+}
+
+.notification-group-collapse-button,
+.notification-group-close-all-button {
+    background: transparent;
+    color: @text;
+    margin: 4px;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.notification-group-collapse-button:hover,
+.notification-group-close-all-button:hover {
+    background: @color2;
+}
+
+/* WIDGETS --------------------------------------------------------------------------- */
+
+/* Notification clear button */
+.widget-title {
+    font-size: 1.2em;
+    margin: 6px;
+}
+
+.widget-title button {
+    background: @background-alt;
+    border-radius: 6px;
+    padding: 4px 16px;
+}
+
+.widget-title button:hover {
+    background-color: @color2;
+}
+
+.widget-title button:active {
+    background-color: @color2;
+}
+
+/* Do not disturb */
+.widget-dnd {
+    margin: 6px;
+    font-size: 1.2rem;
+}
+
+.widget-dnd>switch {
+    background: @background-alt;
+    font-size: initial;
+    border-radius: 8px;
+    box-shadow: none;
+    padding: 2px;
+}
+
+.widget-dnd>switch:hover {
+    background: @color2;
+}
+
+.widget-dnd>switch:checked {
+    background: @color2;
+}
+
+.widget-dnd>switch:checked:hover {
+    background: @color2;
+}
+
+.widget-dnd>switch slider {
+    background: @text;
+    border-radius: 6px;
+}
+
+/* Buttons menu */
+.widget-buttons-grid {
+    font-size: x-large;
+    padding: 6px 2px;
+    margin: 6px;
+    border-radius: 12px;
+    background: @background-alt;
+}
+
+.widget-buttons-grid>flowbox>flowboxchild>button {
+    margin: 4px 10px;
+    padding: 6px 12px;
+    background: transparent;
+    border-radius: 8px;
+}
+
+.widget-buttons-grid>flowbox>flowboxchild>button:hover {
+    background: @color2;
+}
+
+.widget-mpris {
+    background: @background-alt;
+    border-radius: 16px;
+    color: @text;
+    margin: 20px 6px;
+}
+
+.widget-mpris-player {
+    background-color: @background-sec;
+    border-radius: 22px;
+    padding: 6px 14px;
+    margin: 6px;
+}
+
+.widget-mpris>box>button {
+    color: @text;
+    border-radius: 20px;
+}
+
+.widget-mpris button {
+    color: alpha(@text, .6);
+}
+
+.widget-mpris button:hover {
+    color: @text;
+}
+
+.widget-mpris-album-art {
+    border-radius: 16px;
+}
+
+.widget-mpris-title {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.widget-mpris-subtitle {
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+/* Volume */
+.widget-volume {
+    background: @background-sec;
+    color: @background;
+    padding: 4px;
+    margin: 6px;
+    border-radius: 6px;
+}
