@@ -3,5 +3,6 @@
     "files.associations": {
         "*.list": "shellscript",
         "*.pkgs": "shellscript"
-    }
+    },
+    "qt-qml.qmlls.useQmlImportPathEnvVar": true
 }

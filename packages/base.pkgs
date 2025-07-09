@@ -21,14 +21,13 @@ otf-monaspace-nerd
 qt5-quickcontrols2
 qt6-declarative
 qt6-svg
+quickshell
 rofi
 sddm
 stow
-swaync
 ttf-firacode-nerd
 ttf-jetbrains-mono-nerd
 uwsm
 vim
-waybar
 xdg-user-dirs
 zsh

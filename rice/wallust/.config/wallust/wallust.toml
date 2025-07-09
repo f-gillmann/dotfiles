@@ -37,5 +37,3 @@ hyprland = { template = 'hyprland.conf', target = '~/.cache/wallust/colors/hyprl
 kitty = { template = 'kitty.conf', target = '~/.cache/wallust/colors/kitty.conf' }
 qt = { template = 'qt.conf', target = '~/.cache/wallust/colors/qt.conf' }
 rofi = { template = 'rofi.rasi', target = '~/.cache/wallust/colors/rofi.rasi' }
-swaync = { template = 'swaync.css', target = '~/.cache/wallust/colors/swaync.css' }
-waybar = { template = 'waybar.css', target = '~/.cache/wallust/colors/waybar.css' }
