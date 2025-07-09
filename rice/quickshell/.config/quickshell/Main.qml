@@ -5,13 +5,8 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 
 import "root:/"
+import "./Windows" as Windows
 
-ShellRoot {
-    id: root
-
-    Main { }
-
-    Component.onCompleted: {
-        print(Hyprland.activeWorkspaces)
-    }
+Rectangle {
+    Windows.Background { }
 }
