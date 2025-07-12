@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 hyprctl reload
-hyprctl hyprpaper reload ,"~/.config/.current_wallpaper"
-pkill waybar && hyprctl dispatch exec waybar
-pkill swaync && hyprctl dispatch exec swaync
+hyprctl dispatch exec waypaper --restore
+pkill quickshell && hyprctl dispatch quickshell -p ~/.config/quickshell/shell.qml
 pkill rofi
 
 exit 0

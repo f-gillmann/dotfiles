@@ -1,31 +1,13 @@
 #!/usr/bin/env bash
 
-default_wallpaper="$HOME/.config/.default_wallpaper"
-current_wallpaper_path=$(readlink "$HOME/.config/.current_wallpaper" || echo "")
-new_wallpaper_path="$(readlink -f $1)"
+set -e # exit immediately if a command fails.
 
-check_file() {
-    if [ ! -f "$1" ]; then
-        return 1
-    fi
-}
+wallpaper_path="$1"
 
-main() {
-    if [ -z "$1" ] || [ "$(check_file "$new_wallpaper_path"; echo $?)" != "0" ]; then
-        if [ ! -f "$default_wallpaper" ]; then
-            echo "Error: Default wallpaper '$default_wallpaper' does not exist"
-            exit 1
-        fi
+if [ -z "$wallpaper_path" ] || [ ! -f "$wallpaper_path" ]; then
+    echo "Error: You must provide a valid path to a wallpaper file."
+    echo "Usage: $0 /path/to/wallpaper.png"
+    exit 1
+fi
 
-        ln -sf "$default_wallpaper" "$HOME/.config/.current_wallpaper"
-    else
-        ln -sf "$new_wallpaper_path" "$HOME/.config/.current_wallpaper"
-    fi
-
-    current_wallpaper_path=$(readlink "$HOME/.config/.current_wallpaper")
-    
-    wallust run "$current_wallpaper_path" &&
-    source "$HOME/.config/hypr/scripts/reload.sh"
-}
-
-main "$@"
+wallust run "$wallpaper_path" && source "$HOME/.config/hypr/scripts/reload.sh"
