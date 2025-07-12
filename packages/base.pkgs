@@ -11,6 +11,7 @@ kitty
 layer-shell-qt
 layer-shell-qt5
 less
+libfido2
 libnewt
 neovim
 network-manager-applet
@@ -18,6 +19,7 @@ nm-connection-editor
 nwg-look
 otf-font-awesome
 otf-monaspace-nerd
+pam-u2f
 qt5-quickcontrols2
 qt6-declarative
 qt6-svg
@@ -30,4 +32,5 @@ ttf-jetbrains-mono-nerd
 uwsm
 vim
 xdg-user-dirs
+yubikey-manager
 zsh
