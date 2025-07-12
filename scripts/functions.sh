@@ -35,15 +35,19 @@ print_ascii_art() {
 install_yay() {
     PREVIOUS_DIR=$(pwd)
     TEMP_DIR=$(mktemp -d)
-    
-    git clone -c init.defaultBranch=master --quiet https://aur.archlinux.org/yay-bin.git $TEMP_DIR
-    cd $TEMP_DIR &&
-    makepkg -o &&
-    makepkg -se &&
-    makepkg -i --noconfirm
-
-    cd $PREVIOUS_DIR
-    rm -rf $TEMP_DIR
+    if [[ "$DRY_RUN" == true ]]; then
+        printf "$PREFIX [DRY_RUN] Would run: git clone https://aur.archlinux.org/yay-bin.git $TEMP_DIR$NEWLINE"
+        printf "$PREFIX [DRY_RUN] Would run: cd $TEMP_DIR && makepkg -o && makepkg -se && makepkg -i --noconfirm$NEWLINE"
+        printf "$PREFIX [DRY_RUN] Would run: rm -rf $TEMP_DIR$NEWLINE"
+    else
+        git clone -c init.defaultBranch=master --quiet https://aur.archlinux.org/yay-bin.git $TEMP_DIR
+        cd $TEMP_DIR &&
+        makepkg -o &&
+        makepkg -se &&
+        makepkg -i --noconfirm
+        cd $PREVIOUS_DIR
+        rm -rf $TEMP_DIR
+    fi
 }
 
 is_pkg_installed() {

@@ -21,13 +21,18 @@ check_missing_dependencies() {
 install_missing_depedencies() {
     local MISSING_DEPENDENCIES=("$@")
     local RESPONSE="${MISSING_DEPENDENCIES[-1]}"
-    
     unset MISSING_DEPENDENCIES[-1]
-    
+
     if [[ "$RESPONSE" =~ ^[yY]$ ]]; then
-        sudo pacman -Sy
-        sudo pacman -S --needed --noconfirm "${MISSING_DEPENDENCIES[@]}"
-        return 0
+        if [[ "$DRY_RUN" == true ]]; then
+            printf "$PREFIX [DRY_RUN] Would run: sudo pacman -Sy$NEWLINE"
+            printf "$PREFIX [DRY_RUN] Would run: sudo pacman -S --needed --noconfirm ${MISSING_DEPENDENCIES[*]}$NEWLINE"
+            return 0
+        else
+            sudo pacman -Sy
+            sudo pacman -S --needed --noconfirm "${MISSING_DEPENDENCIES[@]}"
+            return 0
+        fi
     else
         return 1
     fi

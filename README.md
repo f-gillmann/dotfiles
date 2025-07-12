@@ -8,7 +8,7 @@ Hyprland Dotfiles [WIP]
 
 The install script assumes that you are using a base Arch Linux, without any big modifications or desktop environments preinstalled.
 
-**But** the script still tries to back up *some* of your dotfiles already present in `~/.config` and it will also backup your `grub` and `sddm` configs. Review the `Backup files` block inside the `install.sh` script to see what is being backed up.
+**But** the script still tries to back up *some* of your dotfiles already present in `~/.config` and it will also backup your `grub` and `sddm` configs. Review the `scripts/backup.sh` script to see what is being backed up.
 
 ### Nvidia
 If you happen to have a Nvidia GPU, please either add your linux headers (e.g. `linux-headers`) to `packages/custom.pkgs` or install them beforehand, this file does not exist by default.

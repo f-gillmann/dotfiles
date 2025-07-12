@@ -9,6 +9,7 @@
 # Source Scripts #
 #----------------#
 
+source ./scripts/backups.sh
 source ./scripts/functions.sh
 source ./scripts/install_dependencies.sh
 source ./scripts/install_dotfiles.sh
@@ -24,7 +25,7 @@ HIGHLIGHT_COLOR=$((31 + $RANDOM % 6))
 COLOR="\e[${HIGHLIGHT_COLOR}m"
 LIGHT_COLOR="\e[$((${HIGHLIGHT_COLOR} + 60))m"
 RESET_COLOR="\e[0m"
-NEWLINE="\n"
+NEWLINE="$NEWLINE"
 PREFIX="${COLOR}\$${RESET_COLOR}/${LIGHT_COLOR}>${RESET_COLOR}"
 
 BASE_PACKAGES="packages/base.pkgs"
@@ -34,14 +35,65 @@ CUSTOM_PACKAGES="packages/custom.pkgs"
 CURRENT_USER=$(whoami)
 DATE_TIME=$(date +"%Y%m%d_%H%M%S")
 SCRIPT_DIR=$(dirname "$0")
-BACKUP_NAME="backup_dotfiles_f-gillmann_${DATE_TIME}"
+BACKUP_NAME="backup_${CURRENT_USER}_${DATE_TIME}"
 BACKUP_DIR="./$BACKUP_NAME"
+BACKUPS=true
+DRY_RUN=false
+
+#-------------#
+# CLI options #
+#-------------#
+
+usage() {
+    echo "Usage: $0 [options]"
+    echo ""
+    echo "Options:"
+    echo "  -n    Disable backups"
+    echo "  -d    (Dry run) Show what changes would be made without applying them"
+    echo "  -h    Show this help message"
+    echo ""
+}
+
+while getopts ":ndh" option; do
+    case $option in
+        n) BACKUPS=false;;
+        d) DRY_RUN=true;;
+        h) usage; exit 0;;
+        \?) 
+            echo "Invalid option: -$OPTARG"
+            usage
+            exit 1;;
+    esac
+done
 
 #-----------------#
 # Print Ascii Art #
 #-----------------#
 
 print_ascii_art $COLOR $LIGHT_COLOR
+
+#---------------------#
+# Print Configuration #
+#---------------------#
+
+printf "$PREFIX --- Configuration ---$NEWLINE"
+printf "$PREFIX Dry run:        %s$NEWLINE" "$( [ "$DRY_RUN" = true ] && echo "Enabled" || echo "Disabled" )"
+printf "$PREFIX Backups:        %s$NEWLINE" "$( [ "$BACKUPS" = false ] && echo "Disabled" || echo "Enabled" )"
+printf "$PREFIX User:           %s$NEWLINE" "$CURRENT_USER"
+if [ "$BACKUPS" = true ]; then
+    printf "$PREFIX Backup folder:  %s$NEWLINE" "$BACKUP_DIR"
+fi
+printf "$PREFIX --- Configuration ---$NEWLINE"
+printf "$PREFIX Note: If you wanna change these, run '$0 -h' to see all options $NEWLINE"
+
+if [ "$DRY_RUN" = false ]; then
+    printf "$PREFIX Dry run is disabled. Do you want to proceed with running the script? [y/N] "
+    read -r response
+    if [[ ! "$response" =~ ^[yY]$ ]]; then
+        printf "$PREFIX Exiting...$NEWLINE"
+        exit 0
+    fi
+fi
 
 #--------------#
 # System Check #
@@ -69,6 +121,18 @@ if grep -qsE '(ID_LIKE=arch)' /etc/*-release; then
         exit 1
     fi
 fi
+
+if [ "$DRY_RUN" = false ]; then
+    # Prompt for sudo password and keep the session alive
+    sudo -v
+    while true; do sleep 60; sudo -n true; kill -0 "$$" || exit; done 2>/dev/null &
+    SUDO_KEEPALIVE_PID=$!
+    # Ensures that we kill the sudo keep-alive process on script exit
+    trap 'kill $SUDO_KEEPALIVE_PID' EXIT
+fi
+
+# TODO: move this into seperate scripts
+# TODO: god and clean this up too - wtf
 
 # Check if we're running grub and configure it if so
 if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
@@ -193,14 +257,14 @@ else
     printf "$PREFIX Dependencies are already installed.$NEWLINE"
 fi
 
-#-------------------------------------#
-# Init submodules if not done already #
-#-------------------------------------#
+#-----------------#
+# Init Submodules #
+#-----------------#
 
 git submodule update --init --recursive
 
 #-------------#
-# Install yay #
+# Install Yay #
 #-------------#
 
 if pacman -Qq "yay" &> /dev/null; then
@@ -226,34 +290,32 @@ fi
 
 printf "$PREFIX Finished installing all packages.$NEWLINE"
 
-#--------------#
-# Backup files #
-#--------------#
+if [ "$BACKUPS" = true ]; then
+    backup_user_dotfiles "$BACKUP_DIR" "$DRY_RUN"
+else
+    echo "Backups disabled by command line option"
+fi
 
-mkdir -p $BACKUP_DIR/.config/
-mkdir -p $BACKUP_DIR/sddm/
+#-------------#
+# Install OMZ #
+#-------------#
 
-cp -rL ~/.zshrc "$BACKUP_DIR/"
-cp -rL ~/.config/hypr "$BACKUP_DIR/.config"
-cp -rL ~/.config/kitty "$BACKUP_DIR/.config"
-cp -rL ~/.config/rofi "$BACKUP_DIR/.config"
-cp -rL ~/.config/swaync "$BACKUP_DIR/.config"
-cp -rL ~/.config/waybar "$BACKUP_DIR/.config"
-
-sudo cp /etc/sddm.conf "$BACKUP_DIR/sddm/sddm.conf"
-
-#-------------------#
-# Install oh-my-zsh #
-#-------------------#
-
-if [ -d ".oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-    rm -f .zshrc*
-    chsh -s $(which zsh)
+if [ ! -d ".oh-my-zsh" ]; then
+    if [ "$DRY_RUN" = true ]; then
+        printf "$PREFIX [DRY RUN] Would install oh-my-zsh and set zsh as default shell.$NEWLINE"
+    else
+        if command -v zsh >/dev/null 2>&1; then
+            sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+            rm -f .zshrc*
+            chsh -s "$(command -v zsh)" "$CURRENT_USER"
+        else
+            printf "$PREFIX ERROR: zsh not found, cannot change default shell.$NEWLINE"
+        fi
+    fi
 fi
 
 #------------------#
-# Install dotfiles #
+# Install Dotfiles #
 #------------------#
 
 printf "$PREFIX Installing dotfiles...$NEWLINE"

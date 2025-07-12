@@ -13,6 +13,7 @@ layer-shell-qt
 layer-shell-qt5
 less
 libnewt
+neovim
 network-manager-applet
 nm-connection-editor
 nwg-look
@@ -21,7 +22,6 @@ otf-monaspace-nerd
 qt5-quickcontrols2
 qt6-declarative
 qt6-svg
-quickshell
 rofi
 sddm
 stow

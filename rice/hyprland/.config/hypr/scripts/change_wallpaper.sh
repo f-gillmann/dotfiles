@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-WALLPAPER_DIR=~/Pictures/wallpapers/
+WALLPAPER_DIR=~/Pictures/fg-wallpapers/
 
 wallpapers=$(fd -tf -e jpg -e png . "$WALLPAPER_DIR")
 selected=$(echo "$wallpapers" | rofi -dmenu -p "Select wallpaper")
