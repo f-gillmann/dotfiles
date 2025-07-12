@@ -15,6 +15,9 @@ install_home_dir() {
     local non_nvidia_pkg="hyprland-no-nvidia"
 
     if [[ "$DRY_RUN" == true ]]; then
+        printf "$PREFIX [DRY_RUN] Would run: mkdir -p \$HOME/.config$NEWLINE"
+        printf "$PREFIX [DRY_RUN] Would run: mkdir -p \$HOME/.local/share/icons$NEWLINE"
+
         printf "$PREFIX [DRY_RUN] Would run: stow --target=\"$HOME\" $stow_pkgs$NEWLINE"
 
         if detect_nvidia; then
@@ -28,6 +31,11 @@ install_home_dir() {
         printf "$PREFIX [DRY_RUN] Would run: cp ./update-rice.sh \$HOME/.local/bin$NEWLINE"
         printf "$PREFIX [DRY_RUN] Would run: chmod +x \$HOME/.local/bin/update-rice.sh$NEWLINE"
     else
+        # Create some dirs in case they don't exist to make sure
+        # that we don't have an ugly linking problem with stow
+        mkdir -p "$HOME/.config"
+        mkdir -p "$HOME/.local/share/icons"
+
         stow --target="$HOME" $stow_pkgs
 
         if detect_nvidia; then
