@@ -189,10 +189,13 @@ if is_pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
         fi
     fi
     
-    sudo sed -i "/^GRUB_DEFAULT=/c\GRUB_DEFAULT=saved
-    /^GRUB_GFXMODE=/c\GRUB_GFXMODE=1920x1080x32,auto
-    /^GRUB_DISABLE_OS_PROBER=/c\GRUB_DISABLE_OS_PROBER=false,auto
-    /^#GRUB_SAVEDEFAULT=true/c\GRUB_SAVEDEFAULT=true" /etc/default/grub
+    sudo sed -i -e '
+    s|^GRUB_DEFAULT=.*|GRUB_DEFAULT=saved|
+    s|^GRUB_GFXMODE=.*|GRUB_GFXMODE=3840x2160,2560x1440,2560x1080,1920x1200,1920x1080,1680x1050,1600x900,1440x900,1366x768,1280x1024,1280x800,1280x720,auto|
+    s|^#?GRUB_GFXPAYLOAD_LINUX=.*|GRUB_GFXPAYLOAD_LINUX=keep|
+    s|^#?GRUB_SAVEDEFAULT=.*|GRUB_SAVEDEFAULT=true|
+    s|^GRUB_DISABLE_OS_PROBER=.*|GRUB_DISABLE_OS_PROBER=false|
+    ' /etc/default/grub
     
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 else
