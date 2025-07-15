@@ -17,6 +17,7 @@ backup_user_dotfiles() {
         ["~/.config/rofi"]="$BACKUP_DIR/.config"
         ["~/.config/wallust"]="$BACKUP_DIR/.config"
         ["~/.config/.current-wallpaper"]="$BACKUP_DIR/.config"
+        ["~/.local/share/icons"]="$BACKUP_DIR/.local/share"
     )
 
     local SDDM_SRC="/etc/sddm.conf"
@@ -27,15 +28,19 @@ backup_user_dotfiles() {
         if [ "$DRY_RUN" = true ]; then
             printf "$PREFIX [DRY RUN] Would copy $SRC to $DEST$NEWLINE"
         else
-            mkdir -p "$DEST"
-            cp -rL $SRC "$DEST"
+            if [[ -f $SRC || -d $SRC ]]; then
+                mkdir -p "$DEST"
+                cp -rL $SRC "$DEST"
+            fi
         fi
     done
 
-    if [ "$DRY_RUN" = true ]; then
-        printf "$PREFIX [DRY RUN] Would copy $SDDM_SRC to $SDDM_DEST (sudo required)$NEWLINE"
-    else
-        mkdir -p "$(dirname "$SDDM_DEST")"
-        sudo cp "$SDDM_SRC" "$SDDM_DEST"
+    if is_pkg_installed sddm; then
+        if [ "$DRY_RUN" = true ]; then
+            printf "$PREFIX [DRY RUN] Would copy $SDDM_SRC to $SDDM_DEST (sudo required)$NEWLINE"
+        else
+            mkdir -p "$(dirname "$SDDM_DEST")"
+            sudo cp "$SDDM_SRC" "$SDDM_DEST"
+        fi
     fi
 }

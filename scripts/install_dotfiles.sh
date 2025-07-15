@@ -10,7 +10,7 @@ install_home_dir() {
     cd "$rice_dir"
     printf "$PREFIX Installing dotfiles to $HOME...$NEWLINE"
 
-    local stow_pkgs="hyprcursor hyprland quickshell kitty rofi wallpapers wallust xdg-dirs zsh"
+    local stow_pkgs="hyprcursor hyprland quickshell kitty rofi wallpapers wallust waypaper xdg-dirs zsh"
     local nvidia_pkg="hyprland-nvidia"
     local non_nvidia_pkg="hyprland-no-nvidia"
 
@@ -21,22 +21,24 @@ install_home_dir() {
         printf "$PREFIX [DRY_RUN] Would run: stow --target=\"$HOME\" $stow_pkgs$NEWLINE"
 
         if detect_nvidia; then
-            printf "$PREFIX [DRY_RUN] Would run: stow --target=\"$HOME\" $nvidia_pkg$NEWLINE"
+            printf "$PREFIX [DRY_RUN] Would run: stow --adopt --target=\"$HOME\" $nvidia_pkg$NEWLINE"
         else
-            printf "$PREFIX [DRY_RUN] Would run: stow --target=\"$HOME\" $non_nvidia_pkg$NEWLINE"
+            printf "$PREFIX [DRY_RUN] Would run: stow --adopt --target=\"$HOME\" $non_nvidia_pkg$NEWLINE"
         fi
         
         printf "$PREFIX [DRY_RUN] Would run: xdg-user-dirs-update$NEWLINE"
-        printf "$PREFIX [DRY_RUN] Would run: mkdir -p \$HOME/.local/bin$NEWLINE"
-        printf "$PREFIX [DRY_RUN] Would run: cp ./update-rice.sh \$HOME/.local/bin$NEWLINE"
-        printf "$PREFIX [DRY_RUN] Would run: chmod +x \$HOME/.local/bin/update-rice.sh$NEWLINE"
     else
         # Create some dirs in case they don't exist to make sure
         # that we don't have an ugly linking problem with stow
-        mkdir -p "$HOME/.config"
+        mkdir -p "$HOME/.config/hypr"
         mkdir -p "$HOME/.local/share/icons"
 
-        stow --target="$HOME" $stow_pkgs
+        stow --adopt --target="$HOME" $stow_pkgs
+
+        # Git reset in case we adopted unwanted changes
+        cd ".."
+        git reset --hard HEAD
+        cd "$rice_dir"
 
         if detect_nvidia; then
             stow --target="$HOME" $nvidia_pkg
@@ -45,10 +47,6 @@ install_home_dir() {
         fi
 
         xdg-user-dirs-update
-
-        mkdir -p $HOME/.local/bin
-        cp ./update-rice.sh $HOME/.local/bin
-        chmod +x $HOME/.local/bin/update-rice.sh
     fi
 
     cd ".."
