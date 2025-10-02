@@ -6,27 +6,36 @@ Hyprland Dotfiles [WIP]
 > - This is still work in progress, **stuff will break**!
 > - I am not responsible for any damage to your machine!
 
-The install script assumes that you are using a base Arch Linux, without any big modifications or desktop environments preinstalled.
+```bash
+bash -c "$(curl -fsSL dots.flg.sh)"
+```
 
-**But** the script still tries to back up *some* of your dotfiles already present in `~/.config` and it will also backup your `grub` and `sddm` configs. Review the `scripts/backup.sh` script to see what is being backed up.
+This will:
+1. Clone the repository to `~/.local/flg-dots`
+2. Run the installation script which will:
+   - Check system requirements
+   - Install dependencies
+   - Install yay AUR helper
+   - Install all packages (base + AUR)
+   - Install Oh My Zsh
+   - Install Oh My Posh
+   - Install and configure dotfiles
+
+## Updating
+
+To update your dotfiles, simply run the install script again:
+
+```bash
+cd ~/.local/flg-dots
+./install.sh
+```
+
+The script will automatically detect that it's been run before and enter **update mode**, which will:
+- Update the dotfiles repository
+- Update all packages
+- Update Oh My Zsh
+- Update Oh My Posh
+- Re-apply dotfiles configurations
 
 ### Nvidia
 If you happen to have a Nvidia GPU, please either add your linux headers (e.g. `linux-headers`) to `packages/custom.pkgs` or install them beforehand, this file does not exist by default.
-
-### Method 1:
-Use the `get.sh` script to automatically download the repository.
-
-This will prompt you if you wanna run the `install.sh` afterwards.
-
-```bash
-bash -c "$(curl -fsSL dots.florian-gillmann.com/get.sh)"
-```
-
-### Method 2:
-Clone the repository and run the `install.sh` script manually.
-```bash
-git clone --recurse-submodules https://github.com/f-gillmann/dotfiles &&
-cd dotfiles &&
-chmod +x ./install.sh &&
-./install.sh
-```

@@ -33,30 +33,35 @@ if [[ ${#MISSING_DEPENDENCIES} -gt 0 ]]; then
 fi
 
 printf "$PREFIX Cloning files from ${LIGHT_COLOR}${UNDERLINE}https://github.com/f-gillmann/dotfiles${RESET_COLOR}.$NEWLINE"
-cd $HOME
+
+# Define the target directory
+DOTFILES_DIR="$HOME/.local/flg-dots"
+
+# Create .local directory if it doesn't exist
+mkdir -p "$HOME/.local"
 
 # Check if the dotfiles directory exists
-if [ -d "dotfiles" ]; then
+if [ -d "$DOTFILES_DIR" ]; then
     printf "$PREFIX"
-    read -r -p " dotfiles already exists. Do you want to overwrite it? [y/N]: " overwrite
+    read -r -p " flg-dots already exists in ~/.local/. Do you want to overwrite it? [y/N]: " overwrite
     if [[ $overwrite =~ ^[Yy]$ ]]; then
         # Remove existing directory
-        rm -rf dotfiles
+        rm -rf "$DOTFILES_DIR"
     else
         printf "$PREFIX Exiting...$NEWLINE"
         exit 1
     fi
 fi
 
-git clone --recurse-submodules https://github.com/f-gillmann/dotfiles.git
+git clone --recurse-submodules https://github.com/f-gillmann/dotfiles.git "$DOTFILES_DIR"
 
-printf "$PREFIX Dotfiles have been cloned into ~/dotfiles.$NEWLINE"
+printf "$PREFIX Dotfiles have been cloned into ~/.local/flg-dots.$NEWLINE"
 
 # Prompt if we wanna run the install script
 printf "$PREFIX"
 read -r -p " Do you want to run the install script now? [y/N]: " install
 if [[ $install =~ ^[yY]$ ]]; then
-    cd ./dotfiles &&
+    cd "$DOTFILES_DIR" &&
     chmod +x ./install.sh &&
     ./install.sh
 else

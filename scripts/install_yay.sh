@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#-\   |  --  *      ---   **   ---      *  --  |\----#
+#--\  |        Made by Florian Gillmann        | \---#
+#---\ | https://github.com/f-gillmann/dotfiles |  \--#
+#----\|  --  *      ---   **   ---      *  --  |   \-#
+
+run_install_yay() {
+    if pacman -Qq "yay" &> /dev/null; then
+        printf "$PREFIX yay is already installed.$NEWLINE"
+        return 0
+    fi
+    
+    printf "$PREFIX Installing yay...$NEWLINE"
+    install_yay
+    
+    if [[ $? -eq 0 ]]; then
+        printf "$PREFIX yay has been installed successfully.$NEWLINE"
+        return 0
+    else
+        printf "$PREFIX Failed to install yay.$NEWLINE"
+        return 1
+    fi
+}
