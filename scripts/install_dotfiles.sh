@@ -10,7 +10,26 @@ install_dotfiles() {
     cd "$rice_dir"
     printf "$PREFIX Installing dotfiles to $HOME...$NEWLINE"
     
-    local stow_pkgs="hyprcursor hyprland kitty quickshell wallpapers zsh"
+    local stow_pkgs="hyprland kitty matugen quickshell walker wallpapers wallust waypaper zsh"
+    
+    # Handle hyprcursor installation manually
+    printf "$PREFIX Installing hyprcursor themes...$NEWLINE"
+    local hyprcursor_src="$rice_dir/hyprcursor/.local/share/icons"
+    local hyprcursor_dest="$HOME/.local/share/icons"
+    local cursor_themes=("Bibata-Modern-Ice" "Bibata-Modern-Ice-Hypr" "default")
+    
+    mkdir -p "$hyprcursor_dest"
+    
+    for theme in "${cursor_themes[@]}"; do
+        if [ ! -d "$hyprcursor_dest/$theme" ]; then
+            printf "$PREFIX Copying $theme cursor theme...$NEWLINE"
+            cp -r "$hyprcursor_src/$theme" "$hyprcursor_dest/"
+        else
+            printf "$PREFIX $theme cursor theme already exists, skipping...$NEWLINE"
+        fi
+    done
+    
+    printf "$PREFIX Hyprcursor themes installation completed.$NEWLINE"
     
     # Check for existing .zshrc and handle it interactively
     if [ -f "$HOME/.zshrc" ]; then
@@ -31,7 +50,7 @@ install_dotfiles() {
                 ;;
             2)
                 printf "$PREFIX Keeping existing .zshrc, excluding zsh from stow packages.$NEWLINE"
-                stow_pkgs="hyprcursor hyprland kitty quickshell wallpapers"
+                stow_pkgs="hyprland kitty matugen quickshell walker wallpapers wallust waypaper"
                 ;;
             3)
                 printf "$PREFIX Content of existing .zshrc:$NEWLINE"
@@ -49,17 +68,17 @@ install_dotfiles() {
                         ;;
                     2)
                         printf "$PREFIX Keeping existing .zshrc, excluding zsh from stow packages.$NEWLINE"
-                        stow_pkgs="hyprcursor hyprland kitty quickshell wallpapers"
+                        stow_pkgs="hyprland kitty matugen quickshell walker wallpapers wallust waypaper"
                         ;;
                     *)
                         printf "$PREFIX Invalid choice, keeping existing .zshrc.$NEWLINE"
-                        stow_pkgs="hyprcursor hyprland kitty quickshell wallpapers"
+                        stow_pkgs="hyprland kitty matugen quickshell walker wallpapers wallust waypaper"
                         ;;
                 esac
                 ;;
             *)
                 printf "$PREFIX Invalid choice, keeping existing .zshrc.$NEWLINE"
-                stow_pkgs="hyprcursor hyprland kitty quickshell wallpapers"
+                stow_pkgs="hyprland kitty matugen quickshell walker wallpapers wallust waypaper"
                 ;;
         esac
     fi
@@ -68,7 +87,11 @@ install_dotfiles() {
     # that we don't have an ugly linking problem with stow
     mkdir -p "$HOME/.config/hypr"
     mkdir -p "$HOME/.config/kitty"
+    mkdir -p "$HOME/.config/matugen"
     mkdir -p "$HOME/.config/quickshell"
+    mkdir -p "$HOME/.config/walker"
+    mkdir -p "$HOME/.config/wallust"
+    mkdir -p "$HOME/.config/waypaper"
     mkdir -p "$HOME/.local/share/icons"
     
     stow --target="$HOME" $stow_pkgs
