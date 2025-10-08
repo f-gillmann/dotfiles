@@ -12,7 +12,16 @@ run_install_yay() {
     fi
     
     printf "$PREFIX Installing yay...$NEWLINE"
-    install_yay
+    
+    # Clone yay repository
+    git clone https://aur.archlinux.org/yay.git /tmp/yay
+    cd /tmp/yay
+    
+    # Build and install yay
+    makepkg -si --noconfirm
+    
+    cd "$SCRIPT_DIR"
+    rm -rf /tmp/yay
     
     if [[ $? -eq 0 ]]; then
         printf "$PREFIX yay has been installed successfully.$NEWLINE"
