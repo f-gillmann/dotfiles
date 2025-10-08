@@ -14,7 +14,7 @@
           "type": "root"
         },
         {
-          "background": "transparent",
+          "background": "white",
           "foreground": "black",
           "powerline_symbol": "\ue0b0",
           "style": "powerline",
