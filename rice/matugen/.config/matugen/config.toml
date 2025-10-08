@@ -5,7 +5,7 @@ input_path = '~/.config/matugen/templates/hyprland-template.conf'
 output_path = '~/.config/hypr/conf.d/init/matugen.conf'
 
 [templates.hyprlock]
-input_path = '~/.config/matugen/templates/hl-template.conf'
+input_path = '~/.config/matugen/templates/hyprland-template.conf'
 output_path = '~/.config/hypr/hyprlock-colors.conf'
 
 [templates.kitty]
