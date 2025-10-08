@@ -59,9 +59,9 @@ install_dotfiles() {
                     ;;
                 3)
                     printf "$PREFIX Content of existing $file:$NEWLINE"
-                    printf "----------------------------------------$NEWLINE"
+                    printf "%s$NEWLINE" "----------------------------------------"
                     cat "$HOME/$file"
-                    printf "----------------------------------------$NEWLINE"
+                    printf "%s$NEWLINE" "----------------------------------------"
                     printf "$PREFIX Now choose: (1) Backup and replace, (2) Keep existing: "
                     read -r second_choice
                     case $second_choice in
