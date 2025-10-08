@@ -8,8 +8,4 @@ import "root:/"
 
 ShellRoot {
     id: root
-
-    Component.onCompleted: {
-        print(Hyprland.activeWorkspaces)
-    }
 }

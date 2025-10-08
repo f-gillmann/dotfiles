@@ -1,0 +1,25 @@
+[config]
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland-template.conf'
+output_path = '~/.config/hypr/conf.d/init/matugen.conf'
+
+[templates.hyprlock]
+input_path = '~/.config/matugen/templates/hl-template.conf'
+output_path = '~/.config/hypr/hyprlock-colors.conf'
+
+[templates.kitty]
+input_path = '~/.config/matugen/templates/kitty-template.conf'
+output_path = '~/.config/kitty/matugen.conf'
+
+[templates.walker]
+input_path = '~/.config/matugen/templates/walker-template.css'
+output_path = '~/.config/walker/themes/hypr.css'
+
+[templates.walkernew]
+input_path = '~/.config/matugen/templates/walker-new-template.css'
+output_path = '~/.config/walker/themes/hypr/style.css'
+
+[templates.quickshell]
+input_path = '~/.config/matugen/templates/quickshell-template.json'
+output_path = '~/.config/quickshell/matugen.json'
