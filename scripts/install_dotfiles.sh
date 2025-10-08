@@ -93,6 +93,7 @@ install_dotfiles() {
     mkdir -p "$HOME/.config/wallust"
     mkdir -p "$HOME/.config/waypaper"
     mkdir -p "$HOME/.local/share/icons"
+    mkdir -p "$HOME/Pictures"
     
     stow --target="$HOME" $stow_pkgs
     
