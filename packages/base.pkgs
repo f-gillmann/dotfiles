@@ -7,7 +7,6 @@ hyprpolkitagent
 imagemagick
 kitty
 layer-shell-qt
-layer-shell-qt5
 libfido2
 libnewt
 network-manager-applet
