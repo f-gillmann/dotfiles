@@ -5,7 +5,7 @@
 #---\ | https://github.com/f-gillmann/dotfiles |  \--#
 #----\|  --  *      ---   **   ---      *  --  |   \-#
 
-run_install_yay() {
+run_yay_install() {
     if pacman -Qq "yay" &> /dev/null; then
         printf "$PREFIX yay is already installed.$NEWLINE"
         return 0

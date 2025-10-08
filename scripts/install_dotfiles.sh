@@ -5,7 +5,7 @@
 #---\ | https://github.com/f-gillmann/dotfiles |  \--#
 #----\|  --  *      ---   **   ---      *  --  |   \-#
 
-dotfiles_install() {
+install_dotfiles() {
     local rice_dir="$SCRIPT_DIR/rice"
     cd "$rice_dir"
     printf "$PREFIX Installing dotfiles to $HOME...$NEWLINE"

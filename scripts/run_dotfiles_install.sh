@@ -8,7 +8,7 @@
 run_dotfiles_install() {
     printf "$PREFIX Installing dotfiles...$NEWLINE"
 
-    if ! dotfiles_install; then
+    if ! install_dotfiles; then
         printf "$PREFIX Failed to install home directory dotfiles.$NEWLINE"
         return 1
     fi

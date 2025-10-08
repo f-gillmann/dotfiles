@@ -6,7 +6,7 @@
 #----\|  --  *      ---   **   ---      *  --  |   \-#
 
 detect_update_mode() {
-    local INSTALL_MARKER="$HOME/.local/flg-dots/.installed"
+    local INSTALL_MARKER="$HOME/.local/.flg-installed"
     
     if [ -f "$INSTALL_MARKER" ]; then
         printf "$PREFIX Previous installation detected.$NEWLINE"
@@ -21,7 +21,7 @@ detect_update_mode() {
 }
 
 mark_installation_complete() {
-    local INSTALL_MARKER="$HOME/.local/flg-dots/.installed"
+    local INSTALL_MARKER="$HOME/.local/.flg-installed"
     local TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
     
     echo "$TIMESTAMP" > "$INSTALL_MARKER"
