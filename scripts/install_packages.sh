@@ -9,7 +9,7 @@ install_base() {
     if [[ -f "$1" ]]; then
         printf "$PREFIX Installing base packages from $1...$NEWLINE"
 
-        sudo pacman -Syq --needed --noconfirm - < "$1" 2>&1 | sed 's/warning:/ ->/g;' || {
+        sudo pacman -Syq --needed --noconfirm - < "$1" || {
             printf "$PREFIX Error: Failed to install base packages.$NEWLINE"
             exit 1
         }
