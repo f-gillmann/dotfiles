@@ -24,15 +24,9 @@ install_missing_depedencies() {
     unset MISSING_DEPENDENCIES[-1]
 
     if [[ "$RESPONSE" =~ ^[yY]$ ]]; then
-        if [[ "$DRY_RUN" == true ]]; then
-            printf "$PREFIX [DRY_RUN] Would run: sudo pacman -Sy$NEWLINE"
-            printf "$PREFIX [DRY_RUN] Would run: sudo pacman -S --needed --noconfirm ${MISSING_DEPENDENCIES[*]}$NEWLINE"
-            return 0
-        else
-            sudo pacman -Sy
-            sudo pacman -S --needed --noconfirm "${MISSING_DEPENDENCIES[@]}"
-            return 0
-        fi
+        sudo pacman -Sy
+        sudo pacman -S --needed --noconfirm "${MISSING_DEPENDENCIES[@]}"
+        return 0
     else
         return 1
     fi

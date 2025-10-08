@@ -31,25 +31,3 @@ print_ascii_art() {
     printf "    ${2}╚════════════════════════════════╝${NEWLINE}"
     printf "        ${RESET}made by${RESET} ${2}Florian Gillmann${RESET}${NEWLINE}${NEWLINE}"
 }
-
-is_pkg_installed() {
-    local PKG=$1
-
-    if pacman -Qi "${PKG}" &>/dev/null; then
-      return 0
-    else
-      return 1
-    fi
-}
-
-# Thanks to
-# https://github.com/HyDE-Project/HyDE/blob/a1ed62411cd86426002bb3b0b968ebc0cac9da18/Scripts/global_fn.sh#L69-L88
-detect_nvidia() {
-    readarray -t GPU < <(lspci -k | grep -E "VGA|3D" | awk -F ': ' '{print $NF}')
-
-    if grep -iq nvidia <<<"${GPU[@]}"; then
-      return 0
-    else
-      return 1
-    fi
-}

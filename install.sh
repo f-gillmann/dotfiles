@@ -67,7 +67,7 @@ fi
 # Run Installation Flow #
 #-----------------------#
 
-printf "${NEWLINE}${PREFIX} ${LIGHT_COLOR}=== INSTALL MODE ===${RESET_COLOR}${NEWLINE}"
+printf "${NEWLINE}${PREFIX} ${LIGHT_COLOR}=== INSTALLING DOTFILES ===${RESET_COLOR}${NEWLINE}"
 
 # 1. System checks
 run_system_checks || exit 1
@@ -92,10 +92,6 @@ run_dotfiles_install || exit 1
 
 # 8. Mark installation complete
 mark_installation_complete
-
-#--------#
-# Finish #
-#--------#
 
 printf "${NEWLINE}${PREFIX} ${LIGHT_COLOR}Installation completed successfully!${RESET_COLOR}${NEWLINE}"
 printf "$PREFIX Please reboot your system to apply all changes.${NEWLINE}${NEWLINE}"

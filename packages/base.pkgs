@@ -1,7 +1,4 @@
-brightnessctl
-btop
 dolphin
-fd
 hyprcursor
 hyprland
 hyprlock
@@ -10,14 +7,11 @@ imagemagick
 kitty
 layer-shell-qt
 layer-shell-qt5
-less
 libfido2
 libnewt
-neovim
 network-manager-applet
 nm-connection-editor
 nwg-look
-os-prober
 otf-font-awesome
 otf-monaspace-nerd
 pam-u2f
@@ -25,14 +19,10 @@ playerctl
 qt5-quickcontrols2
 qt6-declarative
 qt6-svg
-rofi
-sddm
 stow
-swww
 ttf-firacode-nerd
 ttf-jetbrains-mono-nerd
 uwsm
-vim
 xdg-user-dirs
 yubikey-manager
 zsh
