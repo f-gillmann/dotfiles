@@ -40,7 +40,7 @@ source "$SCRIPT_DIR/scripts/install_packages.sh"
 # Source modular installation scripts
 source "$SCRIPT_DIR/scripts/system_checks.sh"
 source "$SCRIPT_DIR/scripts/check_dependencies.sh"
-source "$SCRIPT_DIR/scripts/install_yay.sh"
+source "$SCRIPT_DIR/scripts/run_install_yay.sh"
 source "$SCRIPT_DIR/scripts/run_package_install.sh"
 source "$SCRIPT_DIR/scripts/install_omz.sh"
 source "$SCRIPT_DIR/scripts/install_oh_my_posh.sh"

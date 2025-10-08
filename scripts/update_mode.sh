@@ -72,7 +72,7 @@ update_dotfiles_repo() {
 }
 
 run_update_mode() {
-    printf "${NEWLINE}${PREFIX} ${LIGHT_COLOR}=== UPDATE MODE ===${RESET_COLOR}${NEWLINE}"
+    printf "${NEWLINE}${PREFIX} ${LIGHT_COLOR}=== UPDATING DOTFILES ===${RESET_COLOR}${NEWLINE}"
     
     # Update the repository
     update_dotfiles_repo
